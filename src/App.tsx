@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import './components/Dashboard.tsx'
+import './components/Tech.tsx'
 import Dashboard from './components/Dashboard';
-import News from './components/News'
+import Tech from './components/Tech';
+import Navbar from './components/Navbar';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
 
 function App() {
   const [isNewsVisible, setNewsVisible] = useState(false);
@@ -15,14 +18,14 @@ function App() {
 
   return (
     <div className="App">
-      <Dashboard/>
-      
-      <br />
-
-      <button onClick={handleButtonClick}>
-        {isNewsVisible ? 'Hide News' : 'Show News'}
-      </button>
-      {isNewsVisible && <News />}
+    <Router>
+      <Navbar />
+      <Routes> 
+        <Route path="/" element={<Navigate to="/components/Dashboard"/>} />
+        <Route path="/components/Dashboard" element={<Dashboard />}></Route>
+        <Route path="/components/Tech" element={<Tech />}></Route>
+      </Routes>
+    </Router>
     </div>
   );
 }
