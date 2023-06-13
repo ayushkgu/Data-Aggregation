@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import './components/Dashboard.tsx'
 import './components/Tech.tsx'
@@ -10,12 +8,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 
 function App() {
-  const [isNewsVisible, setNewsVisible] = useState(false);
-
-  const handleButtonClick = () => {
-    setNewsVisible(!isNewsVisible);
-  };
-
   return (
     <div className="App">
     <Router>
