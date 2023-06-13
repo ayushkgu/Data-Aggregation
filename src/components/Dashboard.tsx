@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import axios from 'axios';
 
 interface WeatherData {
   temperature: number;
   humidity: number;
-  // Add more weather data fields as needed
+  apparentTemperature: number;
+  precipitationProb: number; 
+  precipitation: number;
+  windSpeed: number; 
 }
 
 interface AirQualityData {
   pm25: number;
   pm10: number;
-  // Add more air quality data fields as needed
 }
 
 const Dashboard: React.FC = () => {
@@ -20,26 +22,30 @@ const Dashboard: React.FC = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [airQuality, setAirQuality] = useState<AirQualityData | null>(null);
 
+  //Fetching Weather Data using Weather Forecast Open-Meteo API
   const fetchWeatherData = async () => {
-    // Fetch weather data using an API of your choice
-    // Replace 'YOUR_WEATHER_API_KEY' with your actual API key
-    const apiKey = 'YOUR_WEATHER_API_KEY';
-    const response = await fetch(
-      `https://api.example.com/weather?city=${city}&apiKey=${apiKey}`
-    );
-    const data = await response.json();
-    setWeather(data);
-  };
+      try {
+        const response = await axios.get<WeatherData>(
+          `https://api.open-meteo.com/v1/forecast?city=${city}&hourly=temperature_2m`
+        );
 
+        setWeather(response.data);
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+      }
+    };
+
+//Fetching Air Quality Data using Air Quality Open-Meteo API
   const fetchAirQualityData = async () => {
-    // Fetch air quality data using an API of your choice
-    // Replace 'YOUR_AIR_QUALITY_API_KEY' with your actual API key
-    const apiKey = 'YOUR_AIR_QUALITY_API_KEY';
-    const response = await fetch(
-      `https://api.example.com/air-quality?city=${city}&apiKey=${apiKey}`
-    );
-    const data = await response.json();
-    setAirQuality(data);
+    try {
+      const response = await axios.get<WeatherData>(
+        `https://api.open-meteo.com/v1/forecast?city=${city}&hourly=temperature_2m`
+      );
+
+      setWeather(response.data);
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,9 +59,11 @@ const Dashboard: React.FC = () => {
       <Row>
         <Col md={{ span: 6, offset: 3 }} className="mt-4">
           <Card>
+
             <Card.Header>
               <h3>Weather and Air Quality Dashboard</h3>
             </Card.Header>
+
             <Card.Body>
               <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="formCity">
@@ -76,14 +84,18 @@ const Dashboard: React.FC = () => {
                   <h4>Weather:</h4>
                   <p>Temperature: {weather.temperature}°C</p>
                   <p>Humidity: {weather.humidity}%</p>
-                  {/* Add more weather data fields as needed */}
+                  <p>Feels like Temperature: {weather.apparentTemperature}°C</p>
+                  <p>Precipitation Probability: {weather.precipitationProb}°C</p>
+                  <p>Wind Speed: {weather.windSpeed}°C</p>
+                  
                   <h4>Air Quality:</h4>
                   <p>PM2.5: {airQuality.pm25}</p>
                   <p>PM10: {airQuality.pm10}</p>
-                  {/* Add more air quality data fields as needed */}
+
                 </div>
               )}
             </Card.Body>
+
           </Card>
         </Col>
       </Row>
