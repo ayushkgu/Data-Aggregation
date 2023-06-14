@@ -1,16 +1,60 @@
-import React, { Component } from 'react';
-import {useState} from 'react';
-//import Navbar from './components/Navbar';
-//import "./App.css";
-import { useRef } from 'react';
-//import Dashboard from './components/Dashboard';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import newsAPIKey from '../newsAPIKey';
+import './Tech.css'
 
-function Tech() {
-    return (
-        <div className="App">
-         <h1>Tech page</h1>
-        </div>
-    );
+interface Article {
+  id: number;
+  title: string;
+  url: string;
+  urlToImage: string;
 }
+
+const Tech: React.FC = () => {
+  const [posts, setPosts] = useState<Article[]>([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        //keyword used to filter is technology 
+        //`https://newsapi.org/v2/everything?q=technology&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`
+
+        //keyword used to filter is internet - articles here are more relevant i guess
+        `https://newsapi.org/v2/everything?q=internet&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`
+      )
+      .then(response => {
+        const { articles } = response.data;
+        setPosts(articles.slice(0, 10)); // displays only top 10
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
+  return (
+    <div>
+      <br /> <br/>
+      <h2>Tech Articles</h2>
+      <ul>
+        {posts.map(post => (
+          <li key={post.id}>
+            <div className="article-container">
+              <img
+                src={post.urlToImage}
+                alt={post.title}
+                className="article-image"
+              />
+              <h3 className="article-title">
+                <a href={post.url} target="_blank" rel="noopener noreferrer">
+                  {post.title}
+                </a>
+              </h3>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default Tech;
