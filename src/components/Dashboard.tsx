@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
@@ -24,40 +24,82 @@ interface AirQualityData {
 
 const Dashboard: React.FC = () => {
   const [city, setCity] = useState('');
-  const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [airQuality, setAirQuality] = useState<AirQualityData | null>(null);
-  const [coordinates, setCoordinates] = useState<GeocodingResult | null>(null);
+
+  const initialCoordinates: GeocodingResult = { latitude: 0, longitude: 0 };
+  const [coordinates, setCoordinates] = useState<GeocodingResult>(initialCoordinates);
+
+  const initialWeather: WeatherData = {temperature: 0, humidity: 0, apparentTemperature: 0, precipitationProb: 0, precipitation: 0, windSpeed:0};
+  const [weather, setWeather] = useState<WeatherData>(initialWeather);
+
+  const initialAirQuality: AirQualityData = { pm25: 0, pm10: 0 };
+  const [airQuality, setAirQuality] = useState<AirQualityData>(initialAirQuality);
+
+  var Geo: GeocodingResult;
+  var Wea: WeatherData;
+  var AirQ: AirQualityData;
 
   //Fetching latitude and longitude using Geocoding Open-Meteo API
   const getCoordinates = async () => {
     try {
       const response = await axios.get(
-        `https://geocoding-api.open-meteo.com/v1/search?name=` + {city} + `&count=1&language=en&format=json`
+        `https://geocoding-api.open-meteo.com/v1/search?name=` + city + `&count=1&language=en&format=json`
       );
       const data = response.data;
 
-      if (data.status === 'OK') {
-        const { lat, lng } = data.results[0].geometry.location;
-        setCoordinates({ latitude: lat, longitude: lng });
-        console.log(lat);
-        console.log(lng);
-      } else {
-        setCoordinates(null);
-      }
+      if (data.results != undefined && data.results.length > 0)  {
+        Geo = {
+          latitude: data.results[0].latitude,
+          longitude: data.results[0].longitude
+        };
+
+        setCoordinates(prevCoordinates => ({
+          ...prevCoordinates,
+          latitude: Geo.latitude,
+          longitude: Geo.longitude
+        }));
+
+        fetchWeatherData();
+        
+      } 
     } catch (error) {
       console.error('Error fetching coordinates:', error);
-      setCoordinates(null);
+      setCoordinates({latitude: 0,longitude: 0});
     }
   };
 
   //Fetching Weather Data using Weather Forecast Open-Meteo API
   const fetchWeatherData = async () => {
       try {
-        const response = await axios.get<WeatherData>(
-          `https://api.open-meteo.com/v1/forecast?latitude=` + coordinates?.latitude + `&longitude=` + coordinates?.longitude + `&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m`
+        const response = await axios.get(
+          `https://api.open-meteo.com/v1/forecast?latitude=` + Geo.latitude + `&longitude=` + Geo.longitude + `&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m`
         );
+      
+        const data = response.data; 
+        
+        if (data.hourly != undefined){
+          
+          Wea = {
+            temperature: data.hourly.temperature_2m[0], 
+            humidity: data.hourly.relativehumidity_2m[0],
+            apparentTemperature: data.hourly.apparent_temperature[0], 
+            precipitationProb: data.hourly.precipitation_probability[0], 
+            precipitation: data.hourly.precipitation[0], 
+            windSpeed: data.hourly.windspeed_10m[0]
+          };
 
-        setWeather(response.data);
+          setWeather(prevWeather => ({
+            ...prevWeather,
+            temperature: Wea.temperature, 
+            humidity: Wea.humidity,
+            apparentTemperature: Wea.apparentTemperature, 
+            precipitationProb: Wea.precipitationProb, 
+            precipitation: Wea.precipitation, 
+            windSpeed: Wea.windSpeed
+          }));
+
+          fetchAirQualityData();
+        }
+        
       } catch (error) {
         console.error('Error fetching weather data:', error);
       }
@@ -66,11 +108,25 @@ const Dashboard: React.FC = () => {
 //Fetching Air Quality Data using Air Quality Open-Meteo API
   const fetchAirQualityData = async () => {
     try {
-      const response = await axios.get<WeatherData>(
-        `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=` + coordinates?.latitude + `&longitude=` + coordinates?.longitude + `&hourly=pm10,pm2_5`
+      const response = await axios.get(
+        `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=` + Geo.latitude + `&longitude=` + Geo.longitude + `&hourly=pm10,pm2_5`
       );
 
-      setWeather(response.data);
+      const data = response.data; 
+
+      if (data.hourly != undefined)  {
+        AirQ = {
+          pm25: data.hourly.pm2_5[0],
+          pm10:  data.hourly.pm10[0]
+        };
+
+        setAirQuality(prevAirQuality => ({
+          ...prevAirQuality,
+          pm25: AirQ.pm25,
+          pm10: AirQ.pm10
+        }));
+      }
+
     } catch (error) {
       console.error('Error fetching weather data:', error);
     }
@@ -79,8 +135,6 @@ const Dashboard: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     getCoordinates();
-    fetchWeatherData();
-    fetchAirQualityData();
   };
 
   return (
@@ -141,7 +195,3 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
-
-
-
-
