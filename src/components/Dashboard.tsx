@@ -70,7 +70,7 @@ const Dashboard: React.FC = () => {
   const fetchWeatherData = async () => {
       try {
         const response = await axios.get(
-          `https://api.open-meteo.com/v1/forecast?latitude=` + Geo.latitude + `&longitude=` + Geo.longitude + `&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m`
+          `https://api.open-meteo.com/v1/forecast?latitude=` + Geo.latitude + `&longitude=` + Geo.longitude + `&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
         );
       
         const data = response.data; 
@@ -159,26 +159,90 @@ const Dashboard: React.FC = () => {
                   <button className="btn btn-primary" type="submit">Submit</button>
                 </form>
 
-                {weather && airQuality && (
-                  <div className="mt-4">
-                    <h4>Weather:</h4>
-                    <p>Temperature: {weather.temperature}°C</p>
-                    <p>Humidity: {weather.humidity}%</p>
-                    <p>Feels like Temperature: {weather.apparentTemperature}°C</p>
-                    <p>Precipitation Probability: {weather.precipitationProb}%</p>
-                    <p>Wind Speed: {weather.windSpeed}</p>
-
-                    <h4>Air Quality:</h4>
-                    <p>PM2.5: {airQuality.pm25}</p>
-                    <p>PM10: {airQuality.pm10}</p>
-                  </div>
-                )}
+                
+              
               </div>
 
             </div>
           </div>
         </div>
       </div>
+
+      <br />
+      <h3>Temperature: {weather.temperature}°F</h3>
+      <br />
+
+<h4 className=''>More details of today's Weather </h4>
+      <div className="container">
+    <div className="row">
+
+      <div className="col-md-4">
+        <div className="card">
+          <div className="card-body">
+            <h6 className="card-title float-start">Humidity</h6> <br /> <br />
+            <h4 className="card-text">{weather.humidity}%</h4>
+          </div>
+        </div>
+      </div>
+
+      <div className="col-md-4">
+        <div className="card">
+          <div className="card-body">
+            <h6 className="card-title float-start">Wind</h6> <br /> <br />
+            <h4 className="card-text">{weather.windSpeed} km/hr</h4>
+          </div>
+        </div>
+      </div>
+
+      <div className="col-md-4">
+        <div className="card">
+          <div className="card-body">
+            <h6 className="card-title float-start">Precipitation</h6> <br /> <br />
+            <h4 className="card-text">{weather.precipitation} inch</h4>
+
+          </div>
+        </div>
+      </div>
+
+      <div className="col-md-4">
+        <div className="card">
+          <div className="card-body">
+            <h6 className="card-title float-start">Feels like</h6> <br /> <br />
+            <h4 className="card-text">{weather.apparentTemperature} °F</h4>
+          </div>
+        </div>
+      </div>
+
+
+      <div className="col-md-4">
+        <div className="card">
+          <div className="card-body">
+            <h6 className="card-title float-start">Chance of rain</h6> <br /> <br />
+            <h4 className="card-text">{weather.precipitationProb}%</h4>
+          </div>
+        </div>
+      </div>
+
+
+      <div className="col-md-4">
+        <div className="card">
+          <div className="card-body">
+            <h6 className="card-title float-start">Air Quality</h6> <br /> <br />
+            <h5 className="card-text">PM2.5: {airQuality.pm25}</h5>
+            <h5 className="card-text">PM10: {airQuality.pm10}</h5>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+
+
+
 
     </div>
 
