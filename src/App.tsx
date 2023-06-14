@@ -1,11 +1,9 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import './components/Dashboard.tsx'
 import './components/Tech.tsx'
 import Dashboard from './components/Dashboard';
 import Tech from './components/Tech';
-import Navbar from './components/Navbar.tsx';
+import Navbar from './components/Navbar';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 
