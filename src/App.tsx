@@ -5,7 +5,7 @@ import Dashboard from './components/Dashboard';
 import Tech from './components/Tech';
 import Navbar from './components/Navbar';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
+import React, {useState, useEffect, useRef} from 'react';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
         <Route path="/components/Dashboard" element={<Dashboard />}></Route>
         <Route path="/components/Tech" element={<Tech />}></Route>
       </Routes>
-    </Router>
+    </Router> 
     </div>
   );
 }
