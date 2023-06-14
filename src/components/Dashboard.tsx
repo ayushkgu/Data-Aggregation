@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
@@ -46,7 +45,7 @@ const Dashboard: React.FC = () => {
       );
       const data = response.data;
 
-      if (data.results != undefined && data.results.length > 0)  {
+      if (data.results !== undefined && data.results.length > 0)  {
         Geo = {
           latitude: data.results[0].latitude,
           longitude: data.results[0].longitude
@@ -59,7 +58,7 @@ const Dashboard: React.FC = () => {
         }));
 
         fetchWeatherData();
-        
+        fetchAirQualityData();
       } 
     } catch (error) {
       console.error('Error fetching coordinates:', error);
@@ -76,7 +75,7 @@ const Dashboard: React.FC = () => {
       
         const data = response.data; 
         
-        if (data.hourly != undefined){
+        if (data.hourly !== undefined){
           
           Wea = {
             temperature: data.hourly.temperature_2m[0], 
@@ -97,7 +96,6 @@ const Dashboard: React.FC = () => {
             windSpeed: Wea.windSpeed
           }));
 
-          fetchAirQualityData();
         }
         
       } catch (error) {
@@ -114,7 +112,7 @@ const Dashboard: React.FC = () => {
 
       const data = response.data; 
 
-      if (data.hourly != undefined)  {
+      if (data.hourly !== undefined)  {
         AirQ = {
           pm25: data.hourly.pm2_5[0],
           pm10:  data.hourly.pm10[0]
@@ -139,59 +137,52 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className='App'>
+      
+      <div className="container">
+        <div className="row">
+          <div className="col-md-6 offset-md-3 mt-4">
+            <div className="card">
 
-      <Container>
-        <Row>
-          <Col md={{ span: 6, offset: 3 }} className="mt-4">
-            <Card>
-
-              <Card.Header>
+              <div className="card-header">
                 <h3>Weather and Air Quality Dashboard</h3>
-              </Card.Header>
+              </div>
 
-              <Card.Body>
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group controlId="formCity">
-                    <Form.Label>Enter a city name:</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="E.g., New York"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                    />
-                  </Form.Group>
+              <div className="card-body">
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group" id="formCity">
+                    <label htmlFor="city">Enter a city name:</label>
+                    <input type="text" className="form-control" placeholder="E.g., New York" id="city" value={city} onChange={(e) => setCity(e.target.value)} />
+                  </div>
 
                   <br />
 
-                  <Button variant="primary" type="submit">
-                    Submit
-                  </Button>
-                </Form>
+                  <button className="btn btn-primary" type="submit">Submit</button>
+                </form>
+
                 {weather && airQuality && (
                   <div className="mt-4">
                     <h4>Weather:</h4>
                     <p>Temperature: {weather.temperature}°C</p>
                     <p>Humidity: {weather.humidity}%</p>
                     <p>Feels like Temperature: {weather.apparentTemperature}°C</p>
-                    <p>Precipitation Probability: {weather.precipitationProb}°C</p>
-                    <p>Wind Speed: {weather.windSpeed}°C</p>
-                    
+                    <p>Precipitation Probability: {weather.precipitationProb}%</p>
+                    <p>Wind Speed: {weather.windSpeed}</p>
+
                     <h4>Air Quality:</h4>
                     <p>PM2.5: {airQuality.pm25}</p>
                     <p>PM10: {airQuality.pm10}</p>
-
                   </div>
                 )}
-              </Card.Body>
+              </div>
 
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
 
   );
 };
 
-export default Dashboard;
+export default Dashboard;                  
