@@ -153,6 +153,7 @@ const Dashboard: React.FC = () => {
       </div>
     </div>
 
+      <div className = "big-card">
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3 mt-4">
@@ -248,20 +249,12 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
-
-
+    </div>
     </div>
   </div>
-
-
-
-
-
-
-
     </div>
 
   );
 };
 
-export default Dashboard;                  
+export default Dashboard; 
