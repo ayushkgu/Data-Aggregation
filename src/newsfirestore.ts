@@ -64,7 +64,7 @@ async function getArticles() {
     // Otherwise, fetch the articles from the API.
     console.log("fetched from NEWS API");
     const response = await axios.get(`https://newsapi.org/v2/everything?q=internet&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`);
-    const articles = response.data.articles.slice(0, 10);
+    const articles = response.data.articles.slice(0, 12);
 
     // Update the document with the new articles and the current time.
     await docRef.set({
