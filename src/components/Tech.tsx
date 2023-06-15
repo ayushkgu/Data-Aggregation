@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import newsAPIKey from '../newsAPIKey';
 import './Tech.css'
+import { printQuery, getArticles } from '../newsfirestore';
 
 interface Article {
   id: number;
@@ -13,22 +14,37 @@ interface Article {
 const Tech: React.FC = () => {
   const [posts, setPosts] = useState<Article[]>([]);
 
-  useEffect(() => {
-    axios
-      .get(
-        //keyword used to filter is technology 
-        //`https://newsapi.org/v2/everything?q=technology&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`
+  const handleQuery = async() => 
+  {
+    console.log("button clicked");
+    printQuery();
+    // getArticles();
+  }
 
-        //keyword used to filter is internet - articles here are more relevant i guess
-        `https://newsapi.org/v2/everything?q=internet&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`
-      )
-      .then(response => {
-        const { articles } = response.data;
-        setPosts(articles.slice(0, 10)); // displays only top 10
-      })
-      .catch(error => {
-        console.error(error);
-      });
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       //keyword used to filter is technology 
+  //       //`https://newsapi.org/v2/everything?q=technology&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`
+
+  //       //keyword used to filter is internet - articles here are more relevant i guess
+  //       `https://newsapi.org/v2/everything?q=internet&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`
+  //     )
+  //     .then(response => {
+  //       const { articles } = response.data;
+  //       setPosts(articles.slice(0, 10)); // displays only top 10
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }, []);
+  useEffect(() => {
+    const fetchArticles = async () => {
+      const articles = await getArticles();
+      setPosts(articles);
+    };
+  
+    fetchArticles();
   }, []);
 
   return (
