@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import './Dashboard.css';
+import { SearchResultsList } from './SearchResultsList';
+import { SearchResult } from './SearchResult';
+import { SearchBar } from './SearchBar';
 
 interface GeocodingResult {
   latitude: number;
@@ -22,6 +26,8 @@ interface AirQualityData {
 }
 
 const Dashboard: React.FC = () => {
+  const [results, setResults] = useState<any[]>([]);
+
   const [city, setCity] = useState('');
 
   const initialCoordinates: GeocodingResult = { latitude: 0, longitude: 0 };
@@ -41,7 +47,7 @@ const Dashboard: React.FC = () => {
   const getCoordinates = async () => {
     try {
       const response = await axios.get(
-        `https://geocoding-api.open-meteo.com/v1/search?name=` + city + `&count=1&language=en&format=json`
+        `https://geocoding-api.open-meteo.com/v1/search?name=` + city + `&count=10&language=en&format=json`
       );
       const data = response.data;
 
@@ -137,7 +143,16 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className='App'>
-      
+        <h3>Weather and Air Quality Dashboard</h3>
+        
+    {/* Search Bar */}
+      <div className="">
+      <div className="search-bar-container">
+        <SearchBar setResults={setResults} />
+        {results && results.length > 0 && <SearchResultsList results={results} />}
+      </div>
+    </div>
+
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3 mt-4">
