@@ -34,7 +34,7 @@ async function printQuery()
       });
     console.log('change to something');
     // query.docs[0].
-    const response = await axios.get(`https://newsapi.org/v2/everything?q=internet&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`);
+    const response = await axios.get(`https://newsapi.org/v2/everything?q=technology&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`);
 
     
 }
@@ -46,7 +46,7 @@ async function getArticles() {
     // If the document exists...
     if (doc.exists && doc.data()) {
         const data = doc.data();
-
+        if (data) {
         // Get the date when the articles were last updated.
         const lastUpdate = new Date(data.time);
         const now = new Date();
@@ -59,6 +59,7 @@ async function getArticles() {
             console.log("fetched from firestore db")
             return data.articles;
         }
+    }
     }
 
     // Otherwise, fetch the articles from the API.
