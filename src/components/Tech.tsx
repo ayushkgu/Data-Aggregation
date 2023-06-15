@@ -47,22 +47,6 @@ const Tech: React.FC = () => {
   
     fetchArticles();
 
-  /**useEffect(() => {
-    axios
-      .get(
-        //keyword used to filter is technology 
-        `https://newsapi.org/v2/everything?q=technology&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`
-
-        //keyword used to filter is internet
-        //`https://newsapi.org/v2/everything?q=internet&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`
-      )
-      .then(response => {
-        const { articles } = response.data;
-        setPosts(articles.slice(0, 12)); // displays only top 10
-      })
-      .catch(error => {
-        console.error(error);
-      }); */
   }, []);
 
   const openPreview = (url: string) => {
