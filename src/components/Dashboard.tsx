@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import './Dashboard.css';
-import { fetchWeather } from '../weatherfirestore';
+import { fetchWeather, fetchAir } from '../weatherfirestore';
 
 
 interface GeocodingResult {
@@ -100,24 +100,17 @@ const Dashboard: React.FC = () => {
 //Fetching Air Quality Data using Air Quality Open-Meteo API
   const fetchAirQualityData = async () => {
     try {
-      const response = await axios.get(
-        `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=` + Geo.latitude + `&longitude=` + Geo.longitude + `&hourly=pm10,pm2_5`
-      );
+        AirQ = await fetchAir(cityFound, Geo.latitude, Geo.longitude);
 
-      const data = response.data; 
 
-      if (data.hourly !== undefined)  {
-        AirQ = {
-          pm25: data.hourly.pm2_5[0],
-          pm10:  data.hourly.pm10[0]
-        };
 
-        setAirQuality(prevAirQuality => ({
+
+        await setAirQuality(prevAirQuality => ({
           ...prevAirQuality,
           pm25: AirQ.pm25,
           pm10: AirQ.pm10
         }));
-      }
+      
 
     } catch (error) {
       console.error('Error fetching weather data:', error);
