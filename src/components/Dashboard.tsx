@@ -4,6 +4,37 @@ import axios from 'axios';
 import './Dashboard.css';
 import { fetchWeather, fetchAir } from '../weatherfirestore';
 
+import { SearchResultsList } from './SearchResultsList';
+import { SearchResult } from './SearchResult';
+import { SearchBar } from './SearchBar';
+import Windpic from './wind.jpeg'
+
+import { Line } from 'react-chartjs-2';
+//import { Chart as ChartJS } from 'chart.js/auto'
+//import { Chart }            from 'react-chartjs-2'
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js'
+import { Chart } from 'react-chartjs-2'
+import { VictoryPie } from 'victory'; // pie chart import
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+)
 
 interface GeocodingResult {
   latitude: number;
@@ -14,9 +45,9 @@ interface WeatherData {
   temperature: number;
   humidity: number;
   apparentTemperature: number;
-  precipitationProb: number; 
+  precipitationProb: number;
   precipitation: number;
-  windSpeed: number; 
+  windSpeed: number;
 }
 
 interface AirQualityData {
@@ -25,53 +56,59 @@ interface AirQualityData {
 }
 
 const Dashboard: React.FC = () => {
+  const [results, setResults] = useState<any[]>([]);
   const [city, setCity] = useState('');
-
   const initialCoordinates: GeocodingResult = { latitude: 0, longitude: 0 };
   const [coordinates, setCoordinates] = useState<GeocodingResult>(initialCoordinates);
-
-  const initialWeather: WeatherData = {temperature: 0, humidity: 0, apparentTemperature: 0, precipitationProb: 0, precipitation: 0, windSpeed:0};
+  const initialWeather: WeatherData = {
+    temperature: 0,
+    humidity: 0,
+    apparentTemperature: 0,
+    precipitationProb: 0,
+    precipitation: 0,
+    windSpeed: 0,
+  };
   const [weather, setWeather] = useState<WeatherData>(initialWeather);
-
   const initialAirQuality: AirQualityData = { pm25: 0, pm10: 0 };
   const [airQuality, setAirQuality] = useState<AirQualityData>(initialAirQuality);
+  const [hourlyForecast, setHourlyForecast] = useState<number[]>([]);
 
   var Geo: GeocodingResult;
   var Wea: WeatherData;
   var AirQ: AirQualityData;
   var cityFound;
   //Fetching latitude and longitude using Geocoding Open-Meteo API
+       
   const getCoordinates = async () => {
     try {
       const response = await axios.get(
-        `https://geocoding-api.open-meteo.com/v1/search?name=` + city + `&count=1&language=en&format=json`
+        `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=10&language=en&format=json`
       );
       const data = response.data;
 
-      if (data.results !== undefined && data.results.length > 0)  {
+      if (data.results !== undefined && data.results.length > 0) {
         Geo = {
           latitude: data.results[0].latitude,
           longitude: data.results[0].longitude,
         };
 
-        setCoordinates(prevCoordinates => ({
+        setCoordinates((prevCoordinates) => ({
           ...prevCoordinates,
           latitude: Geo.latitude,
-          longitude: Geo.longitude
+          longitude: Geo.longitude,
         }));
         console.log("this is data results: " + JSON.stringify(data.results));
         console.log("name of the city: " + data.results[0].name);
         cityFound = data.results[0].name;
         fetchWeatherData();
         fetchAirQualityData();
-      } 
+      }
     } catch (error) {
       console.error('Error fetching coordinates:', error);
-      setCoordinates({latitude: 0,longitude: 0});
+      setCoordinates({ latitude: 0, longitude: 0 });
     }
   };
 
-  //Fetching Weather Data using Weather Forecast Open-Meteo API
   const fetchWeatherData = async () => {
       try {
         // const response = await axios.get(
@@ -94,26 +131,43 @@ const Dashboard: React.FC = () => {
         
       } catch (error) {
         console.error('Error fetching weather data:', error);
-      }
-    };
 
-//Fetching Air Quality Data using Air Quality Open-Meteo API
+      }
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+    }
+  };
+
   const fetchAirQualityData = async () => {
     try {
+
         AirQ = await fetchAir(cityFound, Geo.latitude, Geo.longitude);
 
 
 
 
         await setAirQuality(prevAirQuality => ({
+     // const response = await axios.get(
+       // `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${Geo.latitude}&longitude=${Geo.longitude}&hourly=pm10,pm2_5`
+     // );
+
+     // const data = response.data;
+
+     // if (data.hourly !== undefined) {
+       // AirQ = {
+         // pm25: data.hourly.pm2_5[0],
+         // pm10: data.hourly.pm10[0],
+        //};
+
+       // setAirQuality((prevAirQuality) => ({
           ...prevAirQuality,
           pm25: AirQ.pm25,
-          pm10: AirQ.pm10
+          pm10: AirQ.pm10,
         }));
-      
 
+      }
     } catch (error) {
-      console.error('Error fetching weather data:', error);
+      console.error('Error fetching air quality data:', error);
     }
   };
 
@@ -122,110 +176,225 @@ const Dashboard: React.FC = () => {
     getCoordinates();
   };
 
-  return (
-    <div className='App'>
-      <div className = "big-card">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3 mt-4">
-            <div className="card">
+  const handleSearchResultClick = (selectedResult: any) => {
+    setCity(selectedResult.name);
+    setResults([]);
+  };
 
-              <div className="card-header">
-                <h3>Weather and Air Quality Dashboard</h3>
+  const handleSearchInputChange = (value: string) => {
+    setCity(value);
+    if (value.trim().length === 0) {
+      setResults([]);
+    } else {
+      searchCity(value);
+    }
+  };
+
+  const searchCity = async (searchValue: string) => {
+    try {
+      const response = await axios.get(
+        `https://geocoding-api.open-meteo.com/v1/autocomplete?query=${searchValue}&limit=5&countrycodes=us&language=en`
+      );
+
+      const data = response.data;
+
+      if (data.results !== undefined) {
+        setResults(data.results);
+      }
+    } catch (error) {
+      console.error('Error searching city:', error);
+    }
+  };
+
+  const currentHour = new Date().getHours();
+  const upcomingHours = Array.from({ length: 6 }, (_, i) => currentHour + i + 1);
+  const xLabels = upcomingHours.map(hour => `${hour % 12 === 0 ? 12 : hour % 12} ${hour < 12 ? 'AM' : 'PM'}`);
+
+  const numericalHourlyForecast = hourlyForecast.slice(0, 6).map((value, index) => ({
+    x: upcomingHours[index],
+    y: value,
+  }));
+
+  const humidity = weather.humidity;
+  const precipitationProb = weather.precipitationProb;
+  
+  /** code to display autocontinue search -- place in return() underneath first <h3> tag when ready
+   * <h3>Weather and Air Quality Dashboard</h3>
+        <div className="">
+          <div className="search-bar-container">
+            <SearchBar setResults={setResults} />
+            {results && results.length > 0 && <SearchResultsList results={results} />}
+          </div>
+        </div>
+   */
+
+    return (
+      <div className="App">
+        <br />
+        <br />
+        <div className="first-card">
+        <br />
+        <h2>Weather and Air Quality Dashboard</h2>
+
+        <div className="container">
+          <div className="row">
+            <div className="col-md-6 offset-md-3 mt-4">
+              <div className="card">
+                <div className="card-body">
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group" id="formCity">
+                      <label htmlFor="city">Enter a city name:</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="ex: New York"
+                        id="city"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                      />
+                    </div>
+  
+                    <br />
+  
+                    <button className="btn btn-primary" type="submit">
+                      Submit
+                    </button>
+                  </form>
+                </div>
               </div>
-
-              <div className="card-body">
-                <form onSubmit={handleSubmit}>
-                  <div className="form-group" id="formCity">
-                    <label htmlFor="city">Enter a city name:</label>
-                    <input type="text" className="form-control" placeholder="E.g., New York" id="city" value={city} onChange={(e) => setCity(e.target.value)} />
+            </div>
+          </div>
+        </div>
+  
+          <div className="card-body">
+            <br />
+            <br />
+            <h3 className = 'cur-temp'>Current Temperature: {weather.temperature}°F</h3>
+            <h5 className = 'pm'>PM2.5: {airQuality.pm25}</h5>
+            <h5 className='pm'>PM10: {airQuality.pm10}</h5>
+          </div>
+        </div>
+        <div className="second-card">
+          <br />
+          <div className="card-body">
+            <h2>Hourly Forecast</h2>
+            <div
+              className="chart-container"
+              style={{
+                width: '800px',
+                height: '400px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Line
+                data={{
+                  labels: xLabels,
+                  datasets: [
+                    {
+                      label: 'Hourly Temperature',
+                      data: numericalHourlyForecast,
+                      fill: false,
+                      backgroundColor: 'rgba(75,192,192,0.4)',
+                      borderColor: 'rgba(75,192,192,1)',
+                    },
+                  ],
+                }}
+                options={{
+                  scales: {
+                    x: {
+                      type: 'category',
+                      display: true,
+                      title: {
+                        display: true,
+                        text: 'Time',
+                      },
+                    },
+                    y: {
+                      type: 'linear',
+                      display: true,
+                      title: {
+                        display: true,
+                        text: 'Temperature',
+                      },
+                    },
+                  },
+                }}
+              />
+            </div>
+          </div>
+        </div>
+  
+        <div className="third-card">
+          <div className="card-body">
+            <br />
+            <h2>More details about today's weather</h2>
+            <br />
+            <div className="row">
+              <div className="col-md-4">
+                <div className="little-card">
+                  <div className="card-body">
+                    <h6 className="card-title float-start">Humidity</h6> <br /> <br />
+                    <VictoryPie
+            data={[{ x:  humidity + '%', y: humidity },{ x: ' ', y: 100 - humidity }]}
+            colorScale={['#75baff', '#e4e4e4']}
+            padAngle={3}
+            innerRadius={55}
+            height={180}
+            width={180}
+          />
                   </div>
-
-                  <br />
-
-                  <button className="btn btn-primary" type="submit">Submit</button>
-                </form>
-
-                
-              
+                </div>
               </div>
-
+  
+              <div className="col-md-4">
+                <div className="little-card wind">
+                  <div className="card-body">
+                    <h6 className="card-title float-start">Wind</h6> <br /> <br />
+                    <h4 className="card-text">{weather.windSpeed} km/hr</h4>
+                  </div>
+                </div>
+              </div>
+  
+              <div className="col-md-4">
+                <div className="little-card rain">
+                  <div className="card-body">
+                    <h6 className="card-title float-start">Precipitation</h6> <br /> <br />
+                    <h4 className="card-text">{weather.precipitation} inch</h4>
+                  </div>
+                </div>
+              </div>
+  
+              <div className="col-md-4">
+                <div className="little-card temp">
+                  <div className="card-body">
+                    <h6 className="card-title float-start">Feels like</h6> <br /> <br />
+                    <h4 className="card-text">{weather.apparentTemperature} °F</h4>
+                  </div>
+                </div>
+              </div>
+  
+              <div className="col-md-4">
+                <div className="little-card">
+                  <div className="card-body">
+                    <h6 className="card-title float-start">Chance of rain</h6> <br /> <br />
+                    <VictoryPie
+            data={[{ x:  precipitationProb + '%', y: precipitationProb },{ x: ' ', y: 100 - precipitationProb }]}
+            colorScale={['#75baff', '#e4e4e4']}
+            padAngle={3}
+            innerRadius={55}
+            height={180}
+            width={180}
+          />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <br />
-      <h3>Temperature: {weather.temperature}°F</h3>
-      <br />
-
-<h4 className=''>More details of today's Weather </h4>
-      <div className="container">
-    <div className="row">
-
-      <div className="col-md-4">
-        <div className="card">
-          <div className="card-body">
-            <h6 className="card-title float-start">Humidity</h6> <br /> <br />
-            <h4 className="card-text">{weather.humidity}%</h4>
-          </div>
-        </div>
-      </div>
-
-      <div className="col-md-4">
-        <div className="card">
-          <div className="card-body">
-            <h6 className="card-title float-start">Wind</h6> <br /> <br />
-            <h4 className="card-text">{weather.windSpeed} km/hr</h4>
-          </div>
-        </div>
-      </div>
-
-      <div className="col-md-4">
-        <div className="card">
-          <div className="card-body">
-            <h6 className="card-title float-start">Precipitation</h6> <br /> <br />
-            <h4 className="card-text">{weather.precipitation} inch</h4>
-
-          </div>
-        </div>
-      </div>
-
-      <div className="col-md-4">
-        <div className="card">
-          <div className="card-body">
-            <h6 className="card-title float-start">Feels like</h6> <br /> <br />
-            <h4 className="card-text">{weather.apparentTemperature} °F</h4>
-          </div>
-        </div>
-      </div>
-
-
-      <div className="col-md-4">
-        <div className="card">
-          <div className="card-body">
-            <h6 className="card-title float-start">Chance of rain</h6> <br /> <br />
-            <h4 className="card-text">{weather.precipitationProb}%</h4>
-          </div>
-        </div>
-      </div>
-
-
-      <div className="col-md-4">
-        <div className="card">
-          <div className="card-body">
-            <h6 className="card-title float-start">Air Quality</h6> <br /> <br />
-            <h5 className="card-text">PM2.5: {airQuality.pm25}</h5>
-            <h5 className="card-text">PM10: {airQuality.pm10}</h5>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-  </div>
-    </div>
-
-  );
-};
-
-export default Dashboard; 
+    );
+  };
+  
+  export default Dashboard;

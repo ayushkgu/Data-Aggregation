@@ -55,6 +55,8 @@ const Tech: React.FC = () => {
 
   return (
     <div className="App">
+      <div className="tech-card">
+      <div className="tech-card-body">
       <br />
       <h2 className="tech-title">Technology + AI</h2>
       <h3 className = "tech-intro">Stay up to date with the latest technology articles below</h3>
@@ -69,7 +71,7 @@ const Tech: React.FC = () => {
               />
               <h3 className="article-title">{post.title}</h3>
               <button
-                className="read-more-button"
+                className="btn btn-primary"
                 onClick={() => openPreview(post.url)}
               >
                 Read More
@@ -78,6 +80,8 @@ const Tech: React.FC = () => {
           ))}
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };
