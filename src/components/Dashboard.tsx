@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import './Dashboard.css';
-import { SearchResultsList } from './SearchResultsList';
-import { SearchResult } from './SearchResult';
-import { SearchBar } from './SearchBar';
 import Windpic from './wind.jpeg'
+import AutoCompleteInput from './AutoCompleteInput';
+
 
 import { Line } from 'react-chartjs-2';
 //import { Chart as ChartJS } from 'chart.js/auto'
@@ -75,38 +74,10 @@ const Dashboard: React.FC = () => {
   let Wea: WeatherData;
   let AirQ: AirQualityData;
 
-  const getCoordinates = async () => {
+  const fetchWeatherData = async (lat: string, lng: string) => {
     try {
       const response = await axios.get(
-        `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=10&language=en&format=json`
-      );
-      const data = response.data;
-
-      if (data.results !== undefined && data.results.length > 0) {
-        Geo = {
-          latitude: data.results[0].latitude,
-          longitude: data.results[0].longitude,
-        };
-
-        setCoordinates((prevCoordinates) => ({
-          ...prevCoordinates,
-          latitude: Geo.latitude,
-          longitude: Geo.longitude,
-        }));
-
-        fetchWeatherData();
-        fetchAirQualityData();
-      }
-    } catch (error) {
-      console.error('Error fetching coordinates:', error);
-      setCoordinates({ latitude: 0, longitude: 0 });
-    }
-  };
-
-  const fetchWeatherData = async () => {
-    try {
-      const response = await axios.get(
-        `https://api.open-meteo.com/v1/forecast?latitude=${Geo.latitude}&longitude=${Geo.longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
       );
 
       const data = response.data;
@@ -138,10 +109,10 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const fetchAirQualityData = async () => {
+  const fetchAirQualityData = async (lat: string, lng: string) => {
     try {
       const response = await axios.get(
-        `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${Geo.latitude}&longitude=${Geo.longitude}&hourly=pm10,pm2_5`
+        `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lng}&hourly=pm10,pm2_5`
       );
 
       const data = response.data;
@@ -163,40 +134,11 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    getCoordinates();
+  const handleChildEvent = (lat: string, lng: string) => {
+    fetchWeatherData(lat, lng); 
+    fetchAirQualityData(lat, lng);
   };
 
-  const handleSearchResultClick = (selectedResult: any) => {
-    setCity(selectedResult.name);
-    setResults([]);
-  };
-
-  const handleSearchInputChange = (value: string) => {
-    setCity(value);
-    if (value.trim().length === 0) {
-      setResults([]);
-    } else {
-      searchCity(value);
-    }
-  };
-
-  const searchCity = async (searchValue: string) => {
-    try {
-      const response = await axios.get(
-        `https://geocoding-api.open-meteo.com/v1/autocomplete?query=${searchValue}&limit=5&countrycodes=us&language=en`
-      );
-
-      const data = response.data;
-
-      if (data.results !== undefined) {
-        setResults(data.results);
-      }
-    } catch (error) {
-      console.error('Error searching city:', error);
-    }
-  };
 
   const currentHour = new Date().getHours();
   const upcomingHours = Array.from({ length: 6 }, (_, i) => currentHour + i + 1);
@@ -222,41 +164,19 @@ const Dashboard: React.FC = () => {
 
     return (
       <div className="App">
+
+        <div className='search-bar-container'>
+        <AutoCompleteInput onChildClick = {handleChildEvent}/>
+        </div>
+
+
         <br />
         <br />
+        
         <div className="first-card">
         <br />
         <h2>Weather and Air Quality Dashboard</h2>
 
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6 offset-md-3 mt-4">
-              <div className="card">
-                <div className="card-body">
-                  <form onSubmit={handleSubmit}>
-                    <div className="form-group" id="formCity">
-                      <label htmlFor="city">Enter a city name:</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="ex: New York"
-                        id="city"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                      />
-                    </div>
-  
-                    <br />
-  
-                    <button className="btn btn-primary" type="submit">
-                      Submit
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
   
           <div className="card-body">
             <br />
@@ -266,6 +186,7 @@ const Dashboard: React.FC = () => {
             <h5 className='pm'>PM10: {airQuality.pm10}</h5>
           </div>
         </div>
+
         <div className="second-card">
           <br />
           <div className="card-body">
