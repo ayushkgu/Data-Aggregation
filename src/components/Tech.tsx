@@ -69,7 +69,7 @@ const Tech: React.FC = () => {
               />
               <h3 className="article-title">{post.title}</h3>
               <button
-                className="read-more-button"
+                className="btn btn-primary"
                 onClick={() => openPreview(post.url)}
               >
                 Read More

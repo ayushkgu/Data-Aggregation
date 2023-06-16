@@ -96,4 +96,14 @@
     font-family:serif;
     font-size: x-large;
   }
+
+  .btn{
+    background-color: steelblue;
+    border-color: steelblue;
+  }
+
+  .btn:hover{
+    background-color: lightblue;
+    border-color: lightblue;
+  }
   

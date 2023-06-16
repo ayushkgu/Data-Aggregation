@@ -5,6 +5,7 @@ import './Dashboard.css';
 import { SearchResultsList } from './SearchResultsList';
 import { SearchResult } from './SearchResult';
 import { SearchBar } from './SearchBar';
+import Windpic from './wind.jpeg'
 
 import { Line } from 'react-chartjs-2';
 //import { Chart as ChartJS } from 'chart.js/auto'
@@ -21,6 +22,7 @@ import {
   Legend,
 } from 'chart.js'
 import { Chart } from 'react-chartjs-2'
+import { VictoryPie } from 'victory'; // pie chart import
 
 ChartJS.register(
   CategoryScale,
@@ -204,6 +206,9 @@ const Dashboard: React.FC = () => {
     x: upcomingHours[index],
     y: value,
   }));
+
+  const humidity = weather.humidity;
+  const precipitation = weather.precipitationProb;
   
   /** code to display autocontinue search -- place in return() underneath first <h3> tag when ready
    * <h3>Weather and Air Quality Dashboard</h3>
@@ -219,7 +224,7 @@ const Dashboard: React.FC = () => {
       <div className="App">
         <br />
         <br />
-        <div className="card">
+        <div className="first-card">
         <br />
         <h3>Weather and Air Quality Dashboard</h3>
 
@@ -227,7 +232,6 @@ const Dashboard: React.FC = () => {
           <div className="row">
             <div className="col-md-6 offset-md-3 mt-4">
               <div className="card">
-  
                 <div className="card-body">
                   <form onSubmit={handleSubmit}>
                     <div className="form-group" id="formCity">
@@ -255,14 +259,15 @@ const Dashboard: React.FC = () => {
         </div>
   
           <div className="card-body">
-            <h4 className="card-title">Weather Quality Dashboard</h4>
-            <h3>Current Temperature: {weather.temperature}°F</h3>
+            <br />
+            <br />
+            <h3>Current Temperature in {city}: {weather.temperature}°F</h3>
             <h5 className="card-text">PM2.5: {airQuality.pm25}</h5>
             <h5 className="card-text">PM10: {airQuality.pm10}</h5>
           </div>
         </div>
-  
-        <div className="card">
+        <div className="second-card">
+          <br />
           <div className="card-body">
             <h4 className="card-title">Hourly Temperature Forecast</h4>
             <div
@@ -313,21 +318,30 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
   
-        <div className="card">
+        <div className="third-card">
           <div className="card-body">
+            <br />
             <h4 className="card-title">More details about today's Weather</h4>
+            <br />
             <div className="row">
               <div className="col-md-4">
-                <div className="card">
+                <div className="little-card">
                   <div className="card-body">
                     <h6 className="card-title float-start">Humidity</h6> <br /> <br />
-                    <h4 className="card-text">{weather.humidity}%</h4>
+                    <VictoryPie
+            data={[{ x:  humidity + '%', y: humidity },{ x: ' ', y: 100 - humidity }]}
+            colorScale={['#75baff', '#e4e4e4']}
+            padAngle={3}
+            innerRadius={55}
+            height={180}
+            width={180}
+          />
                   </div>
                 </div>
               </div>
   
               <div className="col-md-4">
-                <div className="card">
+                <div className="little-card wind">
                   <div className="card-body">
                     <h6 className="card-title float-start">Wind</h6> <br /> <br />
                     <h4 className="card-text">{weather.windSpeed} km/hr</h4>
@@ -336,7 +350,7 @@ const Dashboard: React.FC = () => {
               </div>
   
               <div className="col-md-4">
-                <div className="card">
+                <div className="little-card rain">
                   <div className="card-body">
                     <h6 className="card-title float-start">Precipitation</h6> <br /> <br />
                     <h4 className="card-text">{weather.precipitation} inch</h4>
@@ -345,7 +359,7 @@ const Dashboard: React.FC = () => {
               </div>
   
               <div className="col-md-4">
-                <div className="card">
+                <div className="little-card temp">
                   <div className="card-body">
                     <h6 className="card-title float-start">Feels like</h6> <br /> <br />
                     <h4 className="card-text">{weather.apparentTemperature} °F</h4>
@@ -354,10 +368,17 @@ const Dashboard: React.FC = () => {
               </div>
   
               <div className="col-md-4">
-                <div className="card">
+                <div className="little-card">
                   <div className="card-body">
                     <h6 className="card-title float-start">Chance of rain</h6> <br /> <br />
-                    <h4 className="card-text">{weather.precipitationProb}%</h4>
+                    <VictoryPie
+            data={[{ x:  precipitation + '%', y: precipitation },{ x: ' ', y: 100 - precipitation }]}
+            colorScale={['#75baff', '#e4e4e4']}
+            padAngle={3}
+            innerRadius={55}
+            height={180}
+            width={180}
+          />
                   </div>
                 </div>
               </div>
