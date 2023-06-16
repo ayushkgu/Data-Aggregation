@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import './Dashboard.css';
+import { fetchWeather } from '../weatherfirestore';
+
 
 interface GeocodingResult {
   latitude: number;
@@ -37,7 +39,7 @@ const Dashboard: React.FC = () => {
   var Geo: GeocodingResult;
   var Wea: WeatherData;
   var AirQ: AirQualityData;
-
+  var cityFound;
   //Fetching latitude and longitude using Geocoding Open-Meteo API
   const getCoordinates = async () => {
     try {
@@ -49,7 +51,7 @@ const Dashboard: React.FC = () => {
       if (data.results !== undefined && data.results.length > 0)  {
         Geo = {
           latitude: data.results[0].latitude,
-          longitude: data.results[0].longitude
+          longitude: data.results[0].longitude,
         };
 
         setCoordinates(prevCoordinates => ({
@@ -57,7 +59,9 @@ const Dashboard: React.FC = () => {
           latitude: Geo.latitude,
           longitude: Geo.longitude
         }));
-
+        console.log("this is data results: " + JSON.stringify(data.results));
+        console.log("name of the city: " + data.results[0].name);
+        cityFound = data.results[0].name;
         fetchWeatherData();
         fetchAirQualityData();
       } 
@@ -70,34 +74,23 @@ const Dashboard: React.FC = () => {
   //Fetching Weather Data using Weather Forecast Open-Meteo API
   const fetchWeatherData = async () => {
       try {
-        const response = await axios.get(
-          `https://api.open-meteo.com/v1/forecast?latitude=` + Geo.latitude + `&longitude=` + Geo.longitude + `&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
-        );
-      
-        const data = response.data; 
-        
-        if (data.hourly !== undefined){
+        // const response = await axios.get(
+        //   `https://api.open-meteo.com/v1/forecast?latitude=` + Geo.latitude + `&longitude=` + Geo.longitude + `&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
+        // );
           
-          Wea = {
-            temperature: data.hourly.temperature_2m[0], 
-            humidity: data.hourly.relativehumidity_2m[0],
-            apparentTemperature: data.hourly.apparent_temperature[0], 
-            precipitationProb: data.hourly.precipitation_probability[0], 
-            precipitation: data.hourly.precipitation[0], 
-            windSpeed: data.hourly.windspeed_10m[0]
-          };
-
-          setWeather(prevWeather => ({
-            ...prevWeather,
-            temperature: Wea.temperature, 
-            humidity: Wea.humidity,
-            apparentTemperature: Wea.apparentTemperature, 
-            precipitationProb: Wea.precipitationProb, 
-            precipitation: Wea.precipitation, 
-            windSpeed: Wea.windSpeed
-          }));
-
-        }
+        Wea = await fetchWeather(cityFound, Geo.latitude, Geo.longitude);
+        console.log("this is the city: " + city);
+        // const data = response.data; 
+        
+        await setWeather(prevWeather => ({
+          ...prevWeather,
+          temperature: Wea.temperature, 
+          humidity: Wea.humidity,
+          apparentTemperature: Wea.apparentTemperature, 
+          precipitationProb: Wea.precipitationProb, 
+          precipitation: Wea.precipitation, 
+          windSpeed: Wea.windSpeed
+        }));
         
       } catch (error) {
         console.error('Error fetching weather data:', error);
