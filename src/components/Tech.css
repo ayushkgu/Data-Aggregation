@@ -41,13 +41,15 @@
     font-size: 1.2rem;
     font-family: serif;
     color:black;
-    font-weight: 500;
+    font-weight: 550;
   }
   
   .article-image {
-    width: 100%;
-    height: auto;
+    width: 297px;
+    height: 200px;
     margin-bottom: 10px;
+    border-radius: 5px;
+    
   }
   
   .Tech-list {
@@ -59,9 +61,9 @@
   .Tech-list .article-container {
     width: 300px;
     margin: 10px;
-    border: 4px solid #ccc;
+    border: 2px solid #ccc;
     border-radius: 5px;
-    padding: 10px;
+    padding-top: 0px;
   }
   
   .Tech-list .article-container:not(:last-child) {
@@ -71,8 +73,9 @@
   .tech-title{
     text-align: left;
     font-weight: 600;
-    text-decoration: underline;
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+    font-family:serif;
+    font-weight:bolder;
+    color: steelblue;
   }
   
   .read-more-button {
@@ -94,7 +97,7 @@
   .tech-intro{
     text-align: left;
     font-family:serif;
-    font-size: x-large;
+    font-size: larger;
   }
 
   .btn{
@@ -107,3 +110,13 @@
     border-color: lightblue;
   }
   
+  .tech-card {
+    display: inline-block;
+    margin: 0 10px 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 1340px;
+    height:fit-content;
+  }
