@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import './Dashboard.css';
-import { SearchResultsList } from './SearchResultsList';
-import { SearchResult } from './SearchResult';
-import { SearchBar } from './SearchBar';
+import AutoCompleteInput from './AutoCompleteInput';
 
 interface GeocodingResult {
   latitude: number;
@@ -39,44 +37,16 @@ const Dashboard: React.FC = () => {
   const initialAirQuality: AirQualityData = { pm25: 0, pm10: 0 };
   const [airQuality, setAirQuality] = useState<AirQualityData>(initialAirQuality);
 
+
   var Geo: GeocodingResult;
   var Wea: WeatherData;
   var AirQ: AirQualityData;
 
-  //Fetching latitude and longitude using Geocoding Open-Meteo API
-  const getCoordinates = async () => {
-    try {
-      const response = await axios.get(
-        `https://geocoding-api.open-meteo.com/v1/search?name=` + city + `&count=10&language=en&format=json`
-      );
-      const data = response.data;
-
-      if (data.results !== undefined && data.results.length > 0)  {
-        Geo = {
-          latitude: data.results[0].latitude,
-          longitude: data.results[0].longitude
-        };
-
-        setCoordinates(prevCoordinates => ({
-          ...prevCoordinates,
-          latitude: Geo.latitude,
-          longitude: Geo.longitude
-        }));
-
-        fetchWeatherData();
-        fetchAirQualityData();
-      } 
-    } catch (error) {
-      console.error('Error fetching coordinates:', error);
-      setCoordinates({latitude: 0,longitude: 0});
-    }
-  };
-
   //Fetching Weather Data using Weather Forecast Open-Meteo API
-  const fetchWeatherData = async () => {
+  const fetchWeatherData = async (lat: string, lng: string) => {
       try {
         const response = await axios.get(
-          `https://api.open-meteo.com/v1/forecast?latitude=` + Geo.latitude + `&longitude=` + Geo.longitude + `&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
+          `https://api.open-meteo.com/v1/forecast?latitude=` + lat + `&longitude=` + lng + `&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
         );
       
         const data = response.data; 
@@ -110,10 +80,10 @@ const Dashboard: React.FC = () => {
     };
 
 //Fetching Air Quality Data using Air Quality Open-Meteo API
-  const fetchAirQualityData = async () => {
+  const fetchAirQualityData = async (lat: string, lng: string) => {
     try {
       const response = await axios.get(
-        `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=` + Geo.latitude + `&longitude=` + Geo.longitude + `&hourly=pm10,pm2_5`
+        `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=` + lat + `&longitude=` + lng + `&hourly=pm10,pm2_5`
       );
 
       const data = response.data; 
@@ -136,9 +106,10 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    getCoordinates();
+
+  const handleChildEvent = (lat: string, lng: string) => {
+    fetchWeatherData(lat, lng); 
+    fetchAirQualityData(lat, lng);
   };
 
   return (
@@ -146,12 +117,7 @@ const Dashboard: React.FC = () => {
         <h3>Weather and Air Quality Dashboard</h3>
         
     {/* Search Bar */}
-      <div className="">
-      <div className="search-bar-container">
-        <SearchBar setResults={setResults} />
-        {results && results.length > 0 && <SearchResultsList results={results} />}
-      </div>
-    </div>
+    <AutoCompleteInput onChildClick = {handleChildEvent}/>
 
       <div className="container">
         <div className="row">
@@ -160,22 +126,6 @@ const Dashboard: React.FC = () => {
 
               <div className="card-header">
                 <h3>Weather and Air Quality Dashboard</h3>
-              </div>
-
-              <div className="card-body">
-                <form onSubmit={handleSubmit}>
-                  <div className="form-group" id="formCity">
-                    <label htmlFor="city">Enter a city name:</label>
-                    <input type="text" className="form-control" placeholder="E.g., New York" id="city" value={city} onChange={(e) => setCity(e.target.value)} />
-                  </div>
-
-                  <br />
-
-                  <button className="btn btn-primary" type="submit">Submit</button>
-                </form>
-
-                
-              
               </div>
 
             </div>
@@ -252,11 +202,6 @@ const Dashboard: React.FC = () => {
 
     </div>
   </div>
-
-
-
-
-
 
 
     </div>
