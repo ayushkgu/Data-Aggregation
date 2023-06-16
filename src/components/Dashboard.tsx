@@ -119,6 +119,7 @@ const Dashboard: React.FC = () => {
     {/* Search Bar */}
     <AutoCompleteInput onChildClick = {handleChildEvent}/>
 
+      <div className = "big-card">
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3 mt-4">
@@ -198,8 +199,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
-
-
+    </div>
     </div>
   </div>
 
@@ -209,4 +209,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;                  
+export default Dashboard; 
