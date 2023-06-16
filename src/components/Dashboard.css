@@ -166,3 +166,28 @@
     width: 200px;
     height: 100%;
   }
+
+  h2{
+    font-family: serif;
+    font-weight:700;
+    color:steelblue;
+  }
+
+.cur-temp{
+  color:lightskyblue;
+  font-weight:500;
+}
+.pm{
+  color:steelblue;
+  font-weight:600;
+}
+
+.card-title.float-start{
+  color:steelblue;
+  font-weight:600;
+  font-size:larger;
+}
+
+.card-text{
+  color:lightskyblue;
+}

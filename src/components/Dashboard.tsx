@@ -208,7 +208,7 @@ const Dashboard: React.FC = () => {
   }));
 
   const humidity = weather.humidity;
-  const precipitation = weather.precipitationProb;
+  const precipitationProb = weather.precipitationProb;
   
   /** code to display autocontinue search -- place in return() underneath first <h3> tag when ready
    * <h3>Weather and Air Quality Dashboard</h3>
@@ -226,7 +226,7 @@ const Dashboard: React.FC = () => {
         <br />
         <div className="first-card">
         <br />
-        <h3>Weather and Air Quality Dashboard</h3>
+        <h2>Weather and Air Quality Dashboard</h2>
 
         <div className="container">
           <div className="row">
@@ -261,15 +261,15 @@ const Dashboard: React.FC = () => {
           <div className="card-body">
             <br />
             <br />
-            <h3>Current Temperature in {city}: {weather.temperature}°F</h3>
-            <h5 className="card-text">PM2.5: {airQuality.pm25}</h5>
-            <h5 className="card-text">PM10: {airQuality.pm10}</h5>
+            <h3 className = 'cur-temp'>Current Temperature: {weather.temperature}°F</h3>
+            <h5 className = 'pm'>PM2.5: {airQuality.pm25}</h5>
+            <h5 className='pm'>PM10: {airQuality.pm10}</h5>
           </div>
         </div>
         <div className="second-card">
           <br />
           <div className="card-body">
-            <h4 className="card-title">Hourly Forecast</h4>
+            <h2>Hourly Forecast</h2>
             <div
               className="chart-container"
               style={{
@@ -321,7 +321,7 @@ const Dashboard: React.FC = () => {
         <div className="third-card">
           <div className="card-body">
             <br />
-            <h4 className="card-title">More details about today's weather</h4>
+            <h2>More details about today's weather</h2>
             <br />
             <div className="row">
               <div className="col-md-4">
@@ -372,7 +372,7 @@ const Dashboard: React.FC = () => {
                   <div className="card-body">
                     <h6 className="card-title float-start">Chance of rain</h6> <br /> <br />
                     <VictoryPie
-            data={[{ x:  precipitation + '%', y: precipitation },{ x: ' ', y: 100 - precipitation }]}
+            data={[{ x:  precipitationProb + '%', y: precipitationProb },{ x: ' ', y: 100 - precipitationProb }]}
             colorScale={['#75baff', '#e4e4e4']}
             padAngle={3}
             innerRadius={55}
