@@ -132,9 +132,7 @@ const Dashboard: React.FC = () => {
       } catch (error) {
         console.error('Error fetching weather data:', error);
 
-      }
-    } catch (error) {
-      console.error('Error fetching weather data:', error);
+      
     }
   };
 
@@ -166,7 +164,7 @@ const Dashboard: React.FC = () => {
         }));
 
       }
-    } catch (error) {
+    catch (error) {
       console.error('Error fetching air quality data:', error);
     }
   };
