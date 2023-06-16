@@ -52,6 +52,7 @@ export async function fetchWeather(city, latitude, longitude)
             time: new Date().toISOString(),
             weather: Wea
         });
+        return Wea;
     }
     var defaultWeather = {
         temperature: "",
@@ -66,3 +67,54 @@ export async function fetchWeather(city, latitude, longitude)
 }
 
 
+export async function fetchAir(city, latitude, longitude)
+{
+    const docRef = db.collection('airquality').doc(city);
+    const doc = await docRef.get();
+
+    if (doc.exists && doc.data()) {
+        const data = doc.data();
+
+        // Get the date when the articles were last updated.
+        const lastUpdate = new Date(data.time);
+        const now = new Date();
+
+        // If the articles were updated within the last day...
+        console.log("day is" + now.getTime());
+        if (now.getTime() - lastUpdate.getTime() <= 24 * 60 * 60 * 1000) {
+            // Return the articles directly from the database.
+            // console.log(data.articles);
+            console.log("fetched from firestore db for air")
+            // return data.articles;
+            return data.air;
+        }
+    }
+
+    console.log("fetched air api");
+    const response = await axios.get(
+        `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=` + latitude + `&longitude=` + longitude + `&hourly=pm10,pm2_5`
+      );
+
+      const data = response.data; 
+      if (data.hourly !== undefined)  {
+        var AirQ = {
+          pm25: data.hourly.pm2_5[0],
+          pm10:  data.hourly.pm10[0]
+        };
+        await docRef.set({
+            time: new Date().toISOString(),
+            air: AirQ
+        });
+        return AirQ;
+      
+    }
+    var AirQ = {
+        pm25: "",
+        pm10:  ""
+      };
+
+    return AirQ;
+    
+    
+
+}
