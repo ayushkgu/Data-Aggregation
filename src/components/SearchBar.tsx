@@ -38,7 +38,7 @@ interface SearchBarProps {
       <div className="input-wrapper">
         <FaSearch id="search-icon" />
         <input id="inputSearch"
-          placeholder="Enter a city..."
+          placeholder="Enter a city ..."
           value={city}
           onChange={handleChange}
         />

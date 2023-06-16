@@ -7,82 +7,46 @@
     flex-direction: column;
     align-items: center;
     min-width: 200px;
-.big-card {
-    margin-top: 20px;
-    padding: 20px;
-    background-color:lightblue; 
-    border: 1px solid #ccc;
-    border-radius: 10px; 
-    display:inline-block;
-    width:max-content;
-    height: max-content;
+}
 
+  .card {
+    display: inline-block;
+    margin: 0 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
   }
   
-  .big-card h3 {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .big-card h4 {
+  .card-title {
     font-size: 18px;
     font-weight: bold;
-    margin-top: 20px;
+    margin-bottom: 10px;
   }
   
-  .big-card .container {
-    margin-top: 20px;
+  .card-body {
+    padding: 20px;
   }
   
-  .big-card .card {
-    margin-bottom: 20px;
-  }
-  
-  .big-card .card-body {
-    text-align: center;
-  }
-  
-  .big-card .card-title {
+  .card-text {
     font-size: 16px;
-    font-weight: bold;
   }
   
-  .big-card .card-text {
-    font-size: 24px;
-    font-weight: bold;
+  .chart-container {
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
-  .card {
-    display:flexbox;
-    flex-direction: column;
-    height: 100%;
-    border-radius: 40px; 
-    
-    
+  .row {
+    margin-right: -15px;
+    margin-left: -15px;
   }
   
-  .card .card-body {
-    flex-grow: 1;
-    display:contents;
-    flex-direction: column;
-    justify-content: space-between;
+  .col-md-4 {
+    padding-right: 15px;
+    padding-left: 15px;
   }
   
-  .card .card-content {
-    margin-bottom: 1rem;
-  }
-
-  .card .card-title{
-    color:steelblue;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-weight:bolder;
-    font-size: larger;
-    background-color: aliceblue;
-    border-radius: 10px; 
-    padding:5px;
-  }
-  
-  .card .card-text{
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-weight:bolder;
-  }
