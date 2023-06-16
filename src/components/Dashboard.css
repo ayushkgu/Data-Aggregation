@@ -41,28 +41,29 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(60, 118, 255, 0.212);
     padding: 10px;
-    width: 275px; 
-    height: 300px; 
+    width: 230px; 
+    height: 230px; 
   }
 
   .little-card.wind{
     background-image: url(wind.jpeg);
     background-repeat: no-repeat;
     background-position: center bottom;
+    background-size: 80%;
   }
 
   .little-card.rain{
     background-image: url(rain.avif);
     background-repeat: no-repeat;
     background-position: center bottom 20px;
-    background-size: 80%;
+    background-size: 70%;
   }
 
   .little-card.temp{
     background-image: url(temperature.avif);
     background-repeat: no-repeat;
     background-position: center bottom;
-    background-size: 70%;
+    background-size: 63%;
   }
   
   .little-card-title {
@@ -141,8 +142,8 @@
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 10px;
-    width: 1320px;
-    height: 750px;
+    width: 1340px;
+    height: 600px;
     background-color: white;
   }
   

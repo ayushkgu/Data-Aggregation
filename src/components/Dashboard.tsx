@@ -269,7 +269,7 @@ const Dashboard: React.FC = () => {
         <div className="second-card">
           <br />
           <div className="card-body">
-            <h4 className="card-title">Hourly Temperature Forecast</h4>
+            <h4 className="card-title">Hourly Forecast</h4>
             <div
               className="chart-container"
               style={{
@@ -321,7 +321,7 @@ const Dashboard: React.FC = () => {
         <div className="third-card">
           <div className="card-body">
             <br />
-            <h4 className="card-title">More details about today's Weather</h4>
+            <h4 className="card-title">More details about today's weather</h4>
             <br />
             <div className="row">
               <div className="col-md-4">
