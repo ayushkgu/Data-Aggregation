@@ -28,7 +28,7 @@ export async function fetchWeather(city, latitude, longitude)
             // console.log(data.articles);
             console.log("fetched from firestore db for weather")
             // return data.articles;
-            return data.weather;
+            return [data.weather, data.data];
         }
     }
     console.log("fetched weather api");
@@ -50,9 +50,10 @@ export async function fetchWeather(city, latitude, longitude)
           };
         await docRef.set({
             time: new Date().toISOString(),
-            weather: Wea
+            weather: Wea,
+            data: data
         });
-        return Wea;
+        return [Wea, data];
     }
     var defaultWeather = {
         temperature: "",
