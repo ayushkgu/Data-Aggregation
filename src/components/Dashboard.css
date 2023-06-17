@@ -39,7 +39,7 @@
       height: 35px;
   }
   
-  .container {
+  .first-card-container {
     display: flex;
     align-items: center;
     justify-content: center;

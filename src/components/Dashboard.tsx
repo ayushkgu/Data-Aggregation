@@ -207,7 +207,7 @@ const Dashboard: React.FC = () => {
 
                 <div className="card-body"> <br />
                 
-                  <div className="container">
+                  <div className="first-card-container">
                     <div className="sun-container">
                       <img className='sun-icon' src={sunrise} alt="Sunrise Icon" /> 
                       <p className="sun-time">Sunrise: {weather.sunrise}</p>
