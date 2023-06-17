@@ -74,10 +74,11 @@ const Dashboard: React.FC = () => {
   let Geo: GeocodingResult;
   let Wea: WeatherData;
   let AirQ: AirQualityData;
+  var data;
 
   const fetchWeatherData = async (lat: string, lng: string, cityName: string) => {
     try {
-      Wea = await fetchWeather(cityName, lat, lng);
+      [Wea, data] = await fetchWeather(cityName, lat, lng);
 
 
      
@@ -92,7 +93,7 @@ const Dashboard: React.FC = () => {
           windSpeed: Wea.windSpeed,
         }));
 
-        // setHourlyForecast(data.hourly.temperature_2m);
+        setHourlyForecast(data.hourly.temperature_2m);
       
     } catch (error) {
       console.error('Error fetching weather data:', error);
