@@ -4,6 +4,9 @@ import axios from 'axios';
 import './Dashboard.css';
 import Windpic from './wind.jpeg'
 import AutoCompleteInput from './AutoCompleteInput';
+import sunrise from './sunrise.png';
+import sunset from './sunset.png';
+
 
 
 import { Line } from 'react-chartjs-2';
@@ -45,6 +48,11 @@ interface WeatherData {
   precipitationProb: number;
   precipitation: number;
   windSpeed: number;
+  isDay: number;
+  maxTemp: number;
+  minTemp: number;
+  sunrise: string;
+  sunset: string;
 }
 
 interface AirQualityData {
@@ -64,6 +72,11 @@ const Dashboard: React.FC = () => {
     precipitationProb: 0,
     precipitation: 0,
     windSpeed: 0,
+    isDay: 1,
+    maxTemp: 0,
+    minTemp: 0,
+    sunrise: "",
+    sunset: ""
   };
   const [weather, setWeather] = useState<WeatherData>(initialWeather);
   const initialAirQuality: AirQualityData = { pm25: 0, pm10: 0 };
@@ -77,7 +90,8 @@ const Dashboard: React.FC = () => {
   const fetchWeatherData = async (lat: string, lng: string) => {
     try {
       const response = await axios.get(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
+        // `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m,is_day&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch&timezone=auto`
       );
 
       const data = response.data;
@@ -90,6 +104,11 @@ const Dashboard: React.FC = () => {
           precipitationProb: data.hourly.precipitation_probability[0],
           precipitation: data.hourly.precipitation[0],
           windSpeed: data.hourly.windspeed_10m[0],
+          isDay: data.hourly.is_day[0],
+          maxTemp: data.daily.temperature_2m_max[0],
+          minTemp: data.daily.temperature_2m_min[0],
+          sunrise: data.daily.sunrise[0].slice(-5),
+          sunset: data.daily.sunset[0].slice(-5)
         };
 
         setWeather((prevWeather) => ({
@@ -100,6 +119,11 @@ const Dashboard: React.FC = () => {
           precipitationProb: Wea.precipitationProb,
           precipitation: Wea.precipitation,
           windSpeed: Wea.windSpeed,
+          isDay: Wea.isDay,
+          maxTemp: Wea.maxTemp,
+          minTemp: Wea.minTemp, 
+          sunrise: Wea.sunrise, 
+          sunset: Wea.sunset 
         }));
 
         setHourlyForecast(data.hourly.temperature_2m);
@@ -181,13 +205,25 @@ const Dashboard: React.FC = () => {
               <br />
               <h2>Weather and Air Quality </h2>
 
-        
-                <div className="card-body">
-                  <br /><br /><br /> <br /><br /> <br />
+                <div className="card-body"> <br />
+                
+                  <div className="container">
+                    <div className="sun-container">
+                      <img className='sun-icon' src={sunrise} alt="Sunrise Icon" /> 
+                      <p className="sun-time">Sunrise: {weather.sunrise}</p>
+                    </div>
+                    <div className="sun-container">
+                      <img className='sun-icon' src={sunset} alt="Sunset Icon" />
+                      <p className="sun-time">Sunset: {weather.sunset}</p>
+                    </div>
+                  </div>
+
+     
+                  <br /><br />
                   <h3 className = 'cur-temp'> {weather.temperature}°F</h3>
-                  <br /><br /><br /><br /> <br /> <br />
-                  <h5 className = 'pm'>PM2.5: {airQuality.pm25}</h5>
-                  <h5 className='pm'>PM10: {airQuality.pm10}</h5>
+                  <br /><br /><br /><br /> 
+                  <div className='minmax'><b>Low:</b> {weather.minTemp}°F,<b> High:</b> {weather.maxTemp}°F </div> <br />
+                  <h5 className = 'pm'><b>PM2.5:</b> {airQuality.pm25}, <b>PM10:</b> {airQuality.pm10}</h5>
                 </div>
               </div>
           </div>
