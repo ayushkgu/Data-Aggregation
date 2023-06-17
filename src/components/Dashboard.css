@@ -2,7 +2,7 @@
   color:steelblue;
 }
 .search-bar-container {
-    padding-top: 2vh;
+    padding-top: 3vh;
     width: 40%;
     margin: auto;
     display: flex;
@@ -174,11 +174,12 @@
   }
 
 .cur-temp{
-  color:lightskyblue;
-  font-weight:500;
+  color:rgb(0, 0, 0);
+  font-weight: 600;
+  font-size: 45px;
 }
 .pm{
-  color:steelblue;
+  color:rgb(0, 0, 0);
   font-weight:600;
 }
 
@@ -189,5 +190,12 @@
 }
 
 .card-text{
-  color:lightskyblue;
+  color:rgb(0, 0, 0);
+  font-weight: 600;
+}
+
+card-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }

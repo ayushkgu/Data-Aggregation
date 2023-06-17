@@ -173,139 +173,158 @@ const Dashboard: React.FC = () => {
         <br />
         <br />
         
-        <div className="first-card">
-        <br />
-        <h2>Weather and Air Quality Dashboard</h2>
 
-  
-          <div className="card-body">
-            <br />
-            <br />
-            <h3 className = 'cur-temp'>Current Temperature: {weather.temperature}°F</h3>
-            <h5 className = 'pm'>PM2.5: {airQuality.pm25}</h5>
-            <h5 className='pm'>PM10: {airQuality.pm10}</h5>
-          </div>
-        </div>
+        <div className="container">
+          <div className="row">
+            <div className="col-4">
+              <div className="first-card">
+              <br />
+              <h2>Weather and Air Quality </h2>
 
-        <div className="second-card">
-          <br />
-          <div className="card-body">
-            <h2>Hourly Forecast</h2>
-            <div
-              className="chart-container"
-              style={{
-                width: '800px',
-                height: '400px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Line
-                data={{
-                  labels: xLabels,
-                  datasets: [
-                    {
-                      label: 'Hourly Temperature',
-                      data: numericalHourlyForecast,
-                      fill: false,
-                      backgroundColor: 'rgba(75,192,192,0.4)',
-                      borderColor: 'rgba(75,192,192,1)',
-                    },
-                  ],
-                }}
-                options={{
-                  scales: {
-                    x: {
-                      type: 'category',
-                      display: true,
-                      title: {
-                        display: true,
-                        text: 'Time',
-                      },
-                    },
-                    y: {
-                      type: 'linear',
-                      display: true,
-                      title: {
-                        display: true,
-                        text: 'Temperature',
-                      },
-                    },
-                  },
-                }}
-              />
-            </div>
+        
+                <div className="card-body">
+                  <br /><br /><br /> <br /><br /> <br />
+                  <h3 className = 'cur-temp'> {weather.temperature}°F</h3>
+                  <br /><br /><br /><br /> <br /> <br />
+                  <h5 className = 'pm'>PM2.5: {airQuality.pm25}</h5>
+                  <h5 className='pm'>PM10: {airQuality.pm10}</h5>
+                </div>
+              </div>
           </div>
-        </div>
-  
-        <div className="third-card">
-          <div className="card-body">
-            <br />
-            <h2>More details about today's weather</h2>
-            <br />
-            <div className="row">
-              <div className="col-md-4">
-                <div className="little-card">
-                  <div className="card-body">
-                    <h6 className="card-title float-start">Humidity</h6> <br /> <br />
-                    <VictoryPie
-            data={[{ x:  humidity + '%', y: humidity },{ x: ' ', y: 100 - humidity }]}
-            colorScale={['#75baff', '#e4e4e4']}
-            padAngle={3}
-            innerRadius={55}
-            height={180}
-            width={180}
-          />
-                  </div>
-                </div>
-              </div>
-  
-              <div className="col-md-4">
-                <div className="little-card wind">
-                  <div className="card-body">
-                    <h6 className="card-title float-start">Wind</h6> <br /> <br />
-                    <h4 className="card-text">{weather.windSpeed} km/hr</h4>
-                  </div>
-                </div>
-              </div>
-  
-              <div className="col-md-4">
-                <div className="little-card rain">
-                  <div className="card-body">
-                    <h6 className="card-title float-start">Precipitation</h6> <br /> <br />
-                    <h4 className="card-text">{weather.precipitation} inch</h4>
-                  </div>
-                </div>
-              </div>
-  
-              <div className="col-md-4">
-                <div className="little-card temp">
-                  <div className="card-body">
-                    <h6 className="card-title float-start">Feels like</h6> <br /> <br />
-                    <h4 className="card-text">{weather.apparentTemperature} °F</h4>
-                  </div>
-                </div>
-              </div>
-  
-              <div className="col-md-4">
-                <div className="little-card">
-                  <div className="card-body">
-                    <h6 className="card-title float-start">Chance of rain</h6> <br /> <br />
-                    <VictoryPie
-            data={[{ x:  precipitationProb + '%', y: precipitationProb },{ x: ' ', y: 100 - precipitationProb }]}
-            colorScale={['#75baff', '#e4e4e4']}
-            padAngle={3}
-            innerRadius={55}
-            height={180}
-            width={180}
-          />
-                  </div>
+
+          <div className="col-8">
+            <div className="second-card">
+              <br />
+              <div className="card-body">
+                <h2>Hourly Forecast</h2>
+                <div
+                  className="chart-container"
+                  style={{
+                    width: '800px',
+                    height: '400px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Line
+                    data={{
+                      labels: xLabels,
+                      datasets: [
+                        {
+                          label: 'Hourly Temperature',
+                          data: numericalHourlyForecast,
+                          fill: false,
+                          backgroundColor: 'rgba(75,192,192,0.4)',
+                          borderColor: 'rgba(0,0,0)',
+                          borderWidth: 2
+                          
+                        },
+                      ],
+                    }}
+                    options={{
+                      scales: {
+                        x: {
+                          type: 'category',
+                          display: true,
+                          title: {
+                            display: true,
+                            text: 'Time',
+                          },
+                        },
+                        y: {
+                          type: 'linear',
+                          display: true,
+                          title: {
+                            display: true,
+                            text: 'Temperature',
+                          },
+                        },
+                      },
+                    }}
+                  />
                 </div>
               </div>
             </div>
           </div>
+       </div>
+      </div>
+
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            <div className="third-card">
+              <div className="card-body">
+                <br />
+                <h2>More details about today's weather</h2>
+                <br />
+                <div className="row">
+                  <div className="col-md-4">
+                    <div className="little-card">
+                      <div className="card-body">
+                        <h6 className="card-title float-start">Humidity</h6> <br /> 
+                        <VictoryPie
+                          data={[{ x:  humidity + '%', y: humidity },{ x: ' ', y: 100 - humidity }]}
+                          colorScale={['#75baff', '#e4e4e4']}
+                          padAngle={3}
+                          innerRadius={55}
+                          height={180}
+                          width={180}
+                        />
+                      </div>
+                    </div>
+                  </div>
+      
+                  <div className="col-md-4">
+                    <div className="little-card wind">
+                      <div className="card-body">
+                        <h6 className="card-title float-start">Wind</h6> <br /> <br />
+                        <h4 className="card-text">{weather.windSpeed} m/s</h4>
+                      </div>
+                    </div>
+                  </div>
+      
+                  <div className="col-md-4">
+                    <div className="little-card rain">
+                      <div className="card-body">
+                        <h6 className="card-title float-start">Precipitation</h6> <br /> <br />
+                        <h4 className="card-text">{weather.precipitation} inch</h4>
+                      </div>
+                    </div>
+                  </div>
+      
+                  <div className="col-md-4">
+                    <div className="little-card temp">
+                      <div className="card-body">
+                        <h6 className="card-title float-start">Feels like</h6> <br /> <br />
+                        <h4 className="card-text">{weather.apparentTemperature} °F</h4>
+                      </div>
+                    </div>
+                  </div>
+      
+                  <div className="col-md-4">
+                    <div className="little-card">
+                      <div className="card-body">
+                        <h6 className="card-title float-start">Chance of rain</h6> <br /> 
+                        <VictoryPie
+                          data={[{ x:  precipitationProb + '%', y: precipitationProb },{ x: ' ', y: 100 - precipitationProb }]}
+                          colorScale={['#75baff', '#e4e4e4']}
+                          padAngle={3}
+                          innerRadius={55}
+                          height={180}
+                          width={180}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
       </div>
     );
   };
