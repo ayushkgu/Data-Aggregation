@@ -4,7 +4,7 @@ import axios from 'axios';
 import './Dashboard.css';
 import Windpic from './wind.jpeg'
 import AutoCompleteInput from './AutoCompleteInput';
-
+import { fetchAir, fetchWeather } from '../weatherfirestore';
 
 import { Line } from 'react-chartjs-2';
 //import { Chart as ChartJS } from 'chart.js/auto'
@@ -55,6 +55,7 @@ interface AirQualityData {
 const Dashboard: React.FC = () => {
   const [results, setResults] = useState<any[]>([]);
   const [city, setCity] = useState('');
+  var [cityName, setCityName] = useState('');
   const initialCoordinates: GeocodingResult = { latitude: 0, longitude: 0 };
   const [coordinates, setCoordinates] = useState<GeocodingResult>(initialCoordinates);
   const initialWeather: WeatherData = {
@@ -74,25 +75,14 @@ const Dashboard: React.FC = () => {
   let Wea: WeatherData;
   let AirQ: AirQualityData;
 
-  const fetchWeatherData = async (lat: string, lng: string) => {
+  const fetchWeatherData = async (lat: string, lng: string, cityName: string) => {
     try {
-      const response = await axios.get(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
-      );
+      Wea = await fetchWeather(cityName, lat, lng);
 
-      const data = response.data;
 
-      if (data.hourly !== undefined) {
-        Wea = {
-          temperature: data.hourly.temperature_2m[0],
-          humidity: data.hourly.relativehumidity_2m[0],
-          apparentTemperature: data.hourly.apparent_temperature[0],
-          precipitationProb: data.hourly.precipitation_probability[0],
-          precipitation: data.hourly.precipitation[0],
-          windSpeed: data.hourly.windspeed_10m[0],
-        };
+     
 
-        setWeather((prevWeather) => ({
+      await setWeather((prevWeather) => ({
           ...prevWeather,
           temperature: Wea.temperature,
           humidity: Wea.humidity,
@@ -102,41 +92,42 @@ const Dashboard: React.FC = () => {
           windSpeed: Wea.windSpeed,
         }));
 
-        setHourlyForecast(data.hourly.temperature_2m);
-      }
+        // setHourlyForecast(data.hourly.temperature_2m);
+      
     } catch (error) {
       console.error('Error fetching weather data:', error);
     }
   };
 
-  const fetchAirQualityData = async (lat: string, lng: string) => {
+  const fetchAirQualityData = async (lat: string, lng: string, cityName: any) => {
     try {
-      const response = await axios.get(
-        `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lng}&hourly=pm10,pm2_5`
-      );
+      // const response = await axios.get(
+      //   `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lng}&hourly=pm10,pm2_5`
+      // );
 
-      const data = response.data;
+      // const data = response.data;
 
-      if (data.hourly !== undefined) {
-        AirQ = {
-          pm25: data.hourly.pm2_5[0],
-          pm10: data.hourly.pm10[0],
-        };
-
+      var AirQ = await fetchAir(cityName, lat, lng);
+      console.log("this is what airq is " + JSON.stringify(AirQ));
+      // if(AirQ.hourly)
+      // {
         setAirQuality((prevAirQuality) => ({
           ...prevAirQuality,
           pm25: AirQ.pm25,
           pm10: AirQ.pm10,
         }));
-      }
-    catch (error) {
+      // }
+      
+    }  catch (error) {
       console.error('Error fetching air quality data:', error);
     }
-  };
+  }
 
-  const handleChildEvent = (lat: string, lng: string) => {
-    fetchWeatherData(lat, lng); 
-    fetchAirQualityData(lat, lng);
+  async function handleChildEvent(lat: string, lng: string, cityName: any){
+    // console.log("city selected from dashboard: " + cityName);
+    console.log("lat, long from dashboard: " + lat + "," + lng);
+    await fetchWeatherData(lat, lng, cityName); 
+    await fetchAirQualityData(lat, lng, cityName);
   };
 
 
