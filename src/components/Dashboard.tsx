@@ -4,11 +4,10 @@ import axios from 'axios';
 import './Dashboard.css';
 import Windpic from './wind.jpeg'
 import AutoCompleteInput from './AutoCompleteInput';
-import { fetchAir, fetchWeather } from '../weatherfirestore';
-
+import sunrise from './sunrise.png';
+import sunset from './sunset.png';
+import { fetchWeather, fetchAir } from '../weatherfirestore';
 import { Line } from 'react-chartjs-2';
-//import { Chart as ChartJS } from 'chart.js/auto'
-//import { Chart }            from 'react-chartjs-2'
 
 import {
   Chart as ChartJS,
@@ -45,6 +44,12 @@ interface WeatherData {
   precipitationProb: number;
   precipitation: number;
   windSpeed: number;
+  isDay: number;
+  maxTemp: number;
+  minTemp: number;
+  sunrise: string;
+  sunset: string;
+  uvIndex: number;
 }
 
 interface AirQualityData {
@@ -65,6 +70,12 @@ const Dashboard: React.FC = () => {
     precipitationProb: 0,
     precipitation: 0,
     windSpeed: 0,
+    isDay: 1,
+    maxTemp: 0,
+    minTemp: 0,
+    sunrise: "",
+    sunset: "",
+    uvIndex: 0
   };
   const [weather, setWeather] = useState<WeatherData>(initialWeather);
   const initialAirQuality: AirQualityData = { pm25: 0, pm10: 0 };
@@ -91,6 +102,12 @@ const Dashboard: React.FC = () => {
           precipitationProb: Wea.precipitationProb,
           precipitation: Wea.precipitation,
           windSpeed: Wea.windSpeed,
+          isDay: Wea.isDay,
+          maxTemp: Wea.maxTemp,
+          minTemp: Wea.minTemp, 
+          sunrise: Wea.sunrise, 
+          sunset: Wea.sunset, 
+          uvIndex: Wea.uvIndex
         }));
 
         setHourlyForecast(data.hourly.temperature_2m);
@@ -144,15 +161,7 @@ const Dashboard: React.FC = () => {
   const humidity = weather.humidity;
   const precipitationProb = weather.precipitationProb;
   
-  /** code to display autocontinue search -- place in return() underneath first <h3> tag when ready
-   * <h3>Weather and Air Quality Dashboard</h3>
-        <div className="">
-          <div className="search-bar-container">
-            <SearchBar setResults={setResults} />
-            {results && results.length > 0 && <SearchResultsList results={results} />}
-          </div>
-        </div>
-   */
+
 
     return (
       <div className="App">
@@ -168,23 +177,35 @@ const Dashboard: React.FC = () => {
 
         <div className="container">
           <div className="row">
-            <div className="col-4">
+            <div className="col-md-4 col-sm-6">
               <div className="first-card">
               <br />
               <h2>Weather and Air Quality </h2>
 
-        
-                <div className="card-body">
-                  <br /><br /><br /> <br /><br /> <br />
+                <div className="card-body"> <br />
+                
+                  <div className="first-card-container">
+                    <div className="sun-container">
+                      <img className='sun-icon' src={sunrise} alt="Sunrise Icon" /> 
+                      <p className="sun-time"> {weather.sunrise}</p>
+                    </div>
+                    <div className="sun-container">
+                      <img className='sun-icon' src={sunset} alt="Sunset Icon" />
+                      <p className="sun-time">{weather.sunset}</p>
+                    </div>
+                  </div>
+
+     
+                  <br />
                   <h3 className = 'cur-temp'> {weather.temperature}°F</h3>
-                  <br /><br /><br /><br /> <br /> <br />
-                  <h5 className = 'pm'>PM2.5: {airQuality.pm25}</h5>
-                  <h5 className='pm'>PM10: {airQuality.pm10}</h5>
+                  <br /><br /><br /><br /> 
+                  <div className='minmax'><b>Low:</b> {weather.minTemp}°F,<b> High:</b> {weather.maxTemp}°F </div> <br />
+                  <h5 className = 'pm'><b>PM2.5:</b> {airQuality.pm25}, <b>PM10:</b> {airQuality.pm10}</h5>
                 </div>
               </div>
           </div>
 
-          <div className="col-8">
+          <div className="col-md-8 col-sm-6">
             <div className="second-card">
               <br />
               <div className="card-body">
@@ -271,7 +292,7 @@ const Dashboard: React.FC = () => {
                     <div className="little-card wind">
                       <div className="card-body">
                         <h6 className="card-title float-start">Wind</h6> <br /> <br />
-                        <h4 className="card-text">{weather.windSpeed} m/s</h4>
+                        <h4 className="card-text">{weather.windSpeed} mph</h4>
                       </div>
                     </div>
                   </div>
@@ -309,6 +330,17 @@ const Dashboard: React.FC = () => {
                       </div>
                     </div>
                   </div>
+
+
+                  <div className="col-md-4">
+                    <div className="little-card uv">
+                      <div className="card-body">
+                        <h6 className="card-title float-start">UV Index</h6> <br /> <br /> 
+                        <h5 className="card-text">{weather.uvIndex}</h5>
+                      </div>
+                    </div>
+                  </div>
+
                   
                 </div>
               </div>

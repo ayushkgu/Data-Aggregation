@@ -34,7 +34,7 @@ export async function fetchWeather(city, latitude, longitude)
     console.log("fetched weather api");
     console.log('latitude is ' + latitude + ", but longitude is " + longitude);
     const response = await axios.get(
-        `https://api.open-meteo.com/v1/forecast?latitude=` + latitude + `&longitude=` + longitude + `&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
+      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m,uv_index,is_day&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto`
       );
 
     const data = response.data;
@@ -46,7 +46,13 @@ export async function fetchWeather(city, latitude, longitude)
             apparentTemperature: data.hourly.apparent_temperature[0], 
             precipitationProb: data.hourly.precipitation_probability[0], 
             precipitation: data.hourly.precipitation[0], 
-            windSpeed: data.hourly.windspeed_10m[0]
+            windSpeed: data.hourly.windspeed_10m[0],
+            isDay: data.hourly.is_day[0],
+          maxTemp: data.daily.temperature_2m_max[0],
+          minTemp: data.daily.temperature_2m_min[0],
+          sunrise: data.daily.sunrise[0].slice(-5),
+          sunset: data.daily.sunset[0].slice(-5),
+          uvIndex: data.hourly.uv_index[0]
           };
         await docRef.set({
             time: new Date().toISOString(),
