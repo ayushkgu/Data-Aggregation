@@ -1,0 +1,125 @@
+
+  .App {
+    background-color: aliceblue;
+    text-align: center;
+    background-color: whitesmoke;
+    height: 100vh;
+    width: 100vw;
+    padding-top: 30px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+  
+  .App-header {
+    background-color: aliceblue;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  
+  .Tech {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .article-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .article-title {
+    font-size: 1.2rem;
+    font-family: serif;
+    color:black;
+    font-weight: 550;
+  }
+  
+  .article-image {
+    width: 297px;
+    height: 200px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    
+  }
+  
+  .Tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .Tech-list .article-container {
+    width: 300px;
+    margin: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    padding-top: 0px;
+  }
+  
+  .Tech-list .article-container:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  .tech-title{
+    text-align: left;
+    font-weight: 600;
+    font-family:serif;
+    font-weight:bolder;
+    color: steelblue;
+  }
+  
+  .read-more-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color:lightblue;
+    color: white;
+    font-size:16px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .read-more-button:hover {
+    background-color:powderblue;
+  }
+  
+  .tech-intro{
+    text-align: left;
+    font-family:serif;
+    font-size: larger;
+    color:lightskyblue;
+    font-weight:bold;
+  }
+
+  .btn{
+    background-color: steelblue;
+    border-color: steelblue;
+  }
+
+  .btn:hover{
+    background-color: lightblue;
+    border-color: lightblue;
+  }
+  
+  .tech-card {
+    display: inline-block;
+    margin: 0 10px 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 1340px;
+    height:fit-content;
+    background-color: white;
+  }
