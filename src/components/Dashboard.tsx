@@ -8,6 +8,7 @@ import sunrise from './sunrise.png';
 import sunset from './sunset.png';
 
 
+
 import { Line } from 'react-chartjs-2';
 //import { Chart as ChartJS } from 'chart.js/auto'
 //import { Chart }            from 'react-chartjs-2'
@@ -62,7 +63,6 @@ interface AirQualityData {
 const Dashboard: React.FC = () => {
   const [results, setResults] = useState<any[]>([]);
   const [city, setCity] = useState('');
-  var [cityName, setCityName] = useState('');
   const initialCoordinates: GeocodingResult = { latitude: 0, longitude: 0 };
   const [coordinates, setCoordinates] = useState<GeocodingResult>(initialCoordinates);
   const initialWeather: WeatherData = {
@@ -86,15 +86,15 @@ const Dashboard: React.FC = () => {
   let Geo: GeocodingResult;
   let Wea: WeatherData;
   let AirQ: AirQualityData;
-  var data;
 
-  const fetchWeatherData = async (lat: string, lng: string, cityName: string) => {
+  const fetchWeatherData = async (lat: string, lng: string) => {
     try {
       const response = await axios.get(
         // `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m,is_day&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch&timezone=auto`
       );
 
+      const data = response.data;
 
       if (data.hourly !== undefined) {
         Wea = {
@@ -111,7 +111,7 @@ const Dashboard: React.FC = () => {
           sunset: data.daily.sunset[0].slice(-5)
         };
 
-      await setWeather((prevWeather) => ({
+        setWeather((prevWeather) => ({
           ...prevWeather,
           temperature: Wea.temperature,
           humidity: Wea.humidity,
@@ -127,41 +127,40 @@ const Dashboard: React.FC = () => {
         }));
 
         setHourlyForecast(data.hourly.temperature_2m);
-      
+      }
     } catch (error) {
       console.error('Error fetching weather data:', error);
     }
   };
 
-  const fetchAirQualityData = async (lat: string, lng: string, cityName: any) => {
+  const fetchAirQualityData = async (lat: string, lng: string) => {
     try {
-      // const response = await axios.get(
-      //   `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lng}&hourly=pm10,pm2_5`
-      // );
+      const response = await axios.get(
+        `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lng}&hourly=pm10,pm2_5`
+      );
 
-      // const data = response.data;
+      const data = response.data;
 
-      var AirQ = await fetchAir(cityName, lat, lng);
-      console.log("this is what airq is " + JSON.stringify(AirQ));
-      // if(AirQ.hourly)
-      // {
+      if (data.hourly !== undefined) {
+        AirQ = {
+          pm25: data.hourly.pm2_5[0],
+          pm10: data.hourly.pm10[0],
+        };
+
         setAirQuality((prevAirQuality) => ({
           ...prevAirQuality,
           pm25: AirQ.pm25,
           pm10: AirQ.pm10,
         }));
-      // }
-      
-    }  catch (error) {
+      }
+    } catch (error) {
       console.error('Error fetching air quality data:', error);
     }
-  }
+  };
 
-  async function handleChildEvent(lat: string, lng: string, cityName: any){
-    // console.log("city selected from dashboard: " + cityName);
-    console.log("lat, long from dashboard: " + lat + "," + lng);
-    await fetchWeatherData(lat, lng, cityName); 
-    await fetchAirQualityData(lat, lng, cityName);
+  const handleChildEvent = (lat: string, lng: string) => {
+    fetchWeatherData(lat, lng); 
+    fetchAirQualityData(lat, lng);
   };
 
 
@@ -187,12 +186,10 @@ const Dashboard: React.FC = () => {
         </div>
    */
 
-
     return (
       <div className="App">
 
         <div className='search-bar-container'>
-        <h2>Search for a City</h2>
         <AutoCompleteInput onChildClick = {handleChildEvent}/>
         </div>
 
@@ -367,5 +364,5 @@ const Dashboard: React.FC = () => {
       </div>
     );
   };
-
+  
   export default Dashboard;
