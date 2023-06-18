@@ -46,7 +46,7 @@ function AutocompleteInput(props: any) {
         type="text"
         value={city}
         onChange={(e) => setCity(e.target.value)}
-        placeholder="Search for a city..."
+        placeholder="Eg: New York, New York, United States"
         className="autocomplete-input" 
       />
 

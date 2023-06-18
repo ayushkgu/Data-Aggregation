@@ -9,6 +9,7 @@ import sunset from './sunset.png';
 
 
 
+
 import { Line } from 'react-chartjs-2';
 //import { Chart as ChartJS } from 'chart.js/auto'
 //import { Chart }            from 'react-chartjs-2'
@@ -186,10 +187,12 @@ const Dashboard: React.FC = () => {
         </div>
    */
 
+
     return (
       <div className="App">
 
         <div className='search-bar-container'>
+        <h2>Search for a City</h2>
         <AutoCompleteInput onChildClick = {handleChildEvent}/>
         </div>
 
@@ -364,5 +367,5 @@ const Dashboard: React.FC = () => {
       </div>
     );
   };
-  
+
   export default Dashboard;
