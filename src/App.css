@@ -1,13 +1,16 @@
 .App {
   text-align: center;
-  background-color:whitesmoke;
-  height: 100vh;
-  width: 100vw;
-  padding-top: 40px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  position: relative;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
 
 .App-header {
