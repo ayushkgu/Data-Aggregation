@@ -35,8 +35,8 @@
   }
 
   .sun-icon{
-      width: 35px;
-      height: 35px;
+      width: 50px;
+      height: 50px;
   }
   
   .first-card-container {
@@ -53,6 +53,7 @@
   .sun-time {
     margin-left: 20px; /* Adjust the value to your desired spacing */
     font-weight: 600;
+    font-size: 30px;
   }
 
   .little-card {
@@ -86,6 +87,15 @@
     background-position: center bottom;
     background-size: 63%;
   }
+
+  .little-card.uv{
+    background-image: url(uvindex.png);
+    background-repeat: no-repeat;
+    background-position: center 80%;
+    background-size: 50%;
+
+  }
+  
   
   .little-card-title {
     font-size: 18px;
@@ -196,7 +206,7 @@
 
 .cur-temp{
   color:rgb(0, 0, 0);
-  font-weight: normal;
+  font-weight: bolder;
   font-size: 70px;
 }
 .minmax{
@@ -217,6 +227,7 @@
 .card-text{
   color:rgb(0, 0, 0);
   font-weight: 600;
+  font-size:25px;
 }
 
 card-container {

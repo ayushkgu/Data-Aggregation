@@ -7,11 +7,7 @@ import AutoCompleteInput from './AutoCompleteInput';
 import sunrise from './sunrise.png';
 import sunset from './sunset.png';
 
-
-
 import { Line } from 'react-chartjs-2';
-//import { Chart as ChartJS } from 'chart.js/auto'
-//import { Chart }            from 'react-chartjs-2'
 
 import {
   Chart as ChartJS,
@@ -53,6 +49,7 @@ interface WeatherData {
   minTemp: number;
   sunrise: string;
   sunset: string;
+  uvIndex: number;
 }
 
 interface AirQualityData {
@@ -76,7 +73,8 @@ const Dashboard: React.FC = () => {
     maxTemp: 0,
     minTemp: 0,
     sunrise: "",
-    sunset: ""
+    sunset: "",
+    uvIndex: 0
   };
   const [weather, setWeather] = useState<WeatherData>(initialWeather);
   const initialAirQuality: AirQualityData = { pm25: 0, pm10: 0 };
@@ -90,8 +88,8 @@ const Dashboard: React.FC = () => {
   const fetchWeatherData = async (lat: string, lng: string) => {
     try {
       const response = await axios.get(
-        // `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch`
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m,is_day&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch&timezone=auto`
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m,uv_index,is_day&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto`
+        // `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation_probability,precipitation,windspeed_10m,is_day&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=ms&precipitation_unit=inch&timezone=auto`
       );
 
       const data = response.data;
@@ -108,7 +106,8 @@ const Dashboard: React.FC = () => {
           maxTemp: data.daily.temperature_2m_max[0],
           minTemp: data.daily.temperature_2m_min[0],
           sunrise: data.daily.sunrise[0].slice(-5),
-          sunset: data.daily.sunset[0].slice(-5)
+          sunset: data.daily.sunset[0].slice(-5),
+          uvIndex: data.hourly.uv_index[0]
         };
 
         setWeather((prevWeather) => ({
@@ -123,7 +122,8 @@ const Dashboard: React.FC = () => {
           maxTemp: Wea.maxTemp,
           minTemp: Wea.minTemp, 
           sunrise: Wea.sunrise, 
-          sunset: Wea.sunset 
+          sunset: Wea.sunset, 
+          uvIndex: Wea.uvIndex
         }));
 
         setHourlyForecast(data.hourly.temperature_2m);
@@ -176,15 +176,7 @@ const Dashboard: React.FC = () => {
   const humidity = weather.humidity;
   const precipitationProb = weather.precipitationProb;
   
-  /** code to display autocontinue search -- place in return() underneath first <h3> tag when ready
-   * <h3>Weather and Air Quality Dashboard</h3>
-        <div className="">
-          <div className="search-bar-container">
-            <SearchBar setResults={setResults} />
-            {results && results.length > 0 && <SearchResultsList results={results} />}
-          </div>
-        </div>
-   */
+
 
     return (
       <div className="App">
@@ -200,7 +192,7 @@ const Dashboard: React.FC = () => {
 
         <div className="container">
           <div className="row">
-            <div className="col-4">
+            <div className="col-md-4 col-sm-6">
               <div className="first-card">
               <br />
               <h2>Weather and Air Quality </h2>
@@ -210,16 +202,16 @@ const Dashboard: React.FC = () => {
                   <div className="first-card-container">
                     <div className="sun-container">
                       <img className='sun-icon' src={sunrise} alt="Sunrise Icon" /> 
-                      <p className="sun-time">Sunrise: {weather.sunrise}</p>
+                      <p className="sun-time"> {weather.sunrise}</p>
                     </div>
                     <div className="sun-container">
                       <img className='sun-icon' src={sunset} alt="Sunset Icon" />
-                      <p className="sun-time">Sunset: {weather.sunset}</p>
+                      <p className="sun-time">{weather.sunset}</p>
                     </div>
                   </div>
 
      
-                  <br /><br />
+                  <br />
                   <h3 className = 'cur-temp'> {weather.temperature}°F</h3>
                   <br /><br /><br /><br /> 
                   <div className='minmax'><b>Low:</b> {weather.minTemp}°F,<b> High:</b> {weather.maxTemp}°F </div> <br />
@@ -228,7 +220,7 @@ const Dashboard: React.FC = () => {
               </div>
           </div>
 
-          <div className="col-8">
+          <div className="col-md-8 col-sm-6">
             <div className="second-card">
               <br />
               <div className="card-body">
@@ -315,7 +307,7 @@ const Dashboard: React.FC = () => {
                     <div className="little-card wind">
                       <div className="card-body">
                         <h6 className="card-title float-start">Wind</h6> <br /> <br />
-                        <h4 className="card-text">{weather.windSpeed} m/s</h4>
+                        <h4 className="card-text">{weather.windSpeed} mph</h4>
                       </div>
                     </div>
                   </div>
@@ -353,6 +345,17 @@ const Dashboard: React.FC = () => {
                       </div>
                     </div>
                   </div>
+
+
+                  <div className="col-md-4">
+                    <div className="little-card uv">
+                      <div className="card-body">
+                        <h6 className="card-title float-start">UV Index</h6> <br /> <br /> 
+                        <h5 className="card-text">{weather.uvIndex}</h5>
+                      </div>
+                    </div>
+                  </div>
+
                   
                 </div>
               </div>
