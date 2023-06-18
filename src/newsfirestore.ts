@@ -64,7 +64,22 @@ async function getArticles() {
 
     // Otherwise, fetch the articles from the API.
     console.log("fetched from NEWS API");
-    const response = await axios.get(`https://newsapi.org/v2/everything?q=internet&from=2023-06-12&to=2023-06-12&sortBy=popularity&apiKey=${newsAPIKey}`);
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    let month: any = currentDate.getMonth() + 1; // getMonth() is zero-indexed, so we add one
+    let day: any = currentDate.getDate();
+    
+    // padStart will add a 0 to the beginning of the string if month or day is less than 10
+    month = month.toString().padStart(2, '0');
+    day = day.toString().padStart(2, '0');
+    
+    const dateString = `${year}-${month}-${day-1}`;
+        // const response = await axios.get(`https://newsapi.org/v2/everything?q=technology&from=2023-06-15&to=2023-06-15&sortBy=popularity&apiKey=${newsAPIKey}`);
+
+
+    console.log("date string is  " + dateString);
+    const response = await axios.get(`https://newsapi.org/v2/everything?q=technology&from=${dateString}&to=${dateString}&sortBy=popularity&apiKey=${newsAPIKey}`);
+    console.log("this is JSON OF RESPONSE: " + JSON.stringify(response));
     const articles = response.data.articles.slice(0, 12);
 
     // Update the document with the new articles and the current time.
