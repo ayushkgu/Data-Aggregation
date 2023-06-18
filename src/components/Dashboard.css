@@ -34,27 +34,6 @@
     height: 70%; 
   }
 
-  .sun-icon{
-      width: 35px;
-      height: 35px;
-  }
-  
-  .first-card-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .sun-container {
-    align-items: center;
-    margin-right: 10px; /* Adjust the value to your desired spacing */
-  }
-
-  .sun-time {
-    margin-left: 20px; /* Adjust the value to your desired spacing */
-    font-weight: 600;
-  }
-
   .little-card {
     display: inline-block;
     margin: 0 10px 20px;
@@ -196,16 +175,12 @@
 
 .cur-temp{
   color:rgb(0, 0, 0);
-  font-weight: normal;
-  font-size: 70px;
+  font-weight: 600;
+  font-size: 45px;
 }
-.minmax{
-  color:rgb(0, 0, 0);
-  font-size:20px;
-}
-
 .pm{
   color:rgb(0, 0, 0);
+  font-weight:600;
 }
 
 .card-title.float-start{
