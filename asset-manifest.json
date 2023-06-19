@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/%7BData-Aggregation%7D/static/css/main.03523552.css",
+    "main.js": "/%7BData-Aggregation%7D/static/js/main.420eb3d9.js",
+    "static/js/787.f933c1a0.chunk.js": "/%7BData-Aggregation%7D/static/js/787.f933c1a0.chunk.js",
+    "static/media/rain.avif": "/%7BData-Aggregation%7D/static/media/rain.c027d91213b7afc75838.avif",
+    "static/media/navpic.png": "/%7BData-Aggregation%7D/static/media/navpic.3183e16d28288003ac07.png",
+    "static/media/uvindex.png": "/%7BData-Aggregation%7D/static/media/uvindex.d3869a4f80b314c25421.png",
+    "static/media/temperature.avif": "/%7BData-Aggregation%7D/static/media/temperature.080b5a5fc6a813022c1b.avif",
+    "static/media/sunrise.png": "/%7BData-Aggregation%7D/static/media/sunrise.ccc91abc59845e8bf28c.png",
+    "static/media/sunset.png": "/%7BData-Aggregation%7D/static/media/sunset.77276b05a1dec5a8a720.png",
+    "index.html": "/%7BData-Aggregation%7D/index.html",
+    "main.03523552.css.map": "/%7BData-Aggregation%7D/static/css/main.03523552.css.map",
+    "main.420eb3d9.js.map": "/%7BData-Aggregation%7D/static/js/main.420eb3d9.js.map",
+    "787.f933c1a0.chunk.js.map": "/%7BData-Aggregation%7D/static/js/787.f933c1a0.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.03523552.css",
+    "static/js/main.420eb3d9.js"
+  ]
+}
