@@ -1,0 +1,237 @@
+.Dashboard{
+  color:steelblue;
+}
+.search-bar-container {
+    padding-top: 3vh;
+    width: 40%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 200px;
+}
+  
+  .chart-container {
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .row {
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+  
+  .col-md-4 {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .victory-pie {
+    width: 70%; 
+    height: 70%; 
+  }
+
+  .sun-icon{
+      width: 50px;
+      height: 50px;
+  }
+  
+  .first-card-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sun-container {
+    align-items: center;
+    margin-right: 10px; /* Adjust the value to your desired spacing */
+  }
+
+  .sun-time {
+    margin-left: 20px; /* Adjust the value to your desired spacing */
+    font-weight: 600;
+    font-size: 30px;
+  }
+
+  .little-card {
+    display: inline-block;
+    margin: 0 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(60, 118, 255, 0.212);
+    padding: 10px;
+    width: 230px; 
+    height: 230px; 
+  }
+
+  .little-card.wind{
+    background-image: url(wind.jpeg);
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: 80%;
+  }
+
+  .little-card.rain{
+    background-image: url(rain.avif);
+    background-repeat: no-repeat;
+    background-position: center bottom 20px;
+    background-size: 70%;
+  }
+
+  .little-card.temp{
+    background-image: url(temperature.avif);
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: 63%;
+  }
+
+  .little-card.uv{
+    background-image: url(uvindex.png);
+    background-repeat: no-repeat;
+    background-position: center 80%;
+    background-size: 50%;
+
+  }
+  
+  
+  .little-card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .little-card-body {
+    padding: 20px;
+    /*color: steelblue;*/
+  }
+  
+  .little-card-text {
+    font-size: 16px;
+  }
+
+  .first-card {
+    display: inline-block;
+    margin: 0 10px 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 420px;
+    height: 530px;
+    background-color: white;
+  }
+  
+  .first-card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .first-card-body {
+    padding: 20px;
+    /*color: steelblue;*/
+  }
+  
+  .first-card-text {
+    font-size: 16px;
+  }
+
+  .second-card {
+    display: inline-block;
+    margin: 0 10px 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 900px;
+    height: 530px;
+    background-color: white;
+  }
+  
+  .second-card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .second-card-body {
+    padding: 20px;
+    /*color: steelblue;*/
+  }
+  
+  .second-card-text {
+    font-size: 16px;
+  }
+
+  .third-card {
+    display: inline-block;
+    margin: 0 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 1340px;
+    height: 600px;
+    background-color: white;
+  }
+  
+  .third-card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .third-card-body {
+    padding: 20px;
+    /*color: steelblue;*/
+  }
+  
+  .third-card-text {
+    font-size: 16px;
+  }
+
+  .card{
+    width: 200px;
+    height: 100%;
+  }
+
+  h2{
+    /* font-family: serif; */
+    font-weight:700;
+    color:steelblue;
+  }
+
+.cur-temp{
+  color:rgb(0, 0, 0);
+  font-weight: bolder;
+  font-size: 70px;
+}
+.minmax{
+  color:rgb(0, 0, 0);
+  font-size:20px;
+}
+
+.pm{
+  color:rgb(0, 0, 0);
+}
+
+.card-title.float-start{
+  color:steelblue;
+  font-weight:600;
+  font-size:larger;
+}
+
+.card-text{
+  color:rgb(0, 0, 0);
+  font-weight: 600;
+  font-size:25px;
+}
+
+card-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
