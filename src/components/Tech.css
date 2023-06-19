@@ -49,6 +49,7 @@
     height: 200px;
     margin-bottom: 10px;
     border-radius: 5px;
+    object-fit: cover;
     
   }
   
