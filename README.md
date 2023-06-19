@@ -1,46 +1,22 @@
-# Getting Started with Create React App
+# Data Aggregation Project 
+### - Created by Ayush Gupta, Salma Omran, Shashi Sugrim
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+✧ This web application aggregates data on weather, airquality, and news for cities around the world by utilizing multiple different APIs inclusing Open-Meteo API and News API.
 
-## Available Scripts
+## Purpose
 
-In the project directory, you can run:
+✧ This project was created in light of the recent Canadian wildfire smoke that spread over to NYC, making our air quality the worst in the world.
 
-### `npm start`
+✧ Many of us citizens lacked important, consolidated weather information and news access to what was going on around us. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Solution 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+✧ Created a web application that provides centralized access to real-time weather data and curated news articles from reliable sources all in one place while maintaining a user friendly interface for seamless naviagtion and better user experience
 
-### `npm test`
+✧ Our Tech Stack: React.js, Typescript, Firebase, CSS, Open-Meteo API, News API
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Weather Dashboard
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## News + Tech
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
