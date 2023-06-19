@@ -167,6 +167,7 @@ const Dashboard: React.FC = () => {
       <div className="App">
 
         <div className='search-bar-container'>
+        <h2> Enter a City Name</h2>
         <AutoCompleteInput onChildClick = {handleChildEvent}/>
         </div>
 
